@@ -902,6 +902,12 @@ export default defineConfig({
       // Local fork builds do not ship third-party crash reporting. Keep the
       // React root error hook contract without loading the full Sentry SDK.
       '@sentry/react': path.resolve(__dirname, './src/vendor/sentry-react-lite.ts'),
+      // The production editor uses only a small Mantine surface through
+      // BlockNote. The full Mantine barrel pulls hundreds of modules into Vite's
+      // transform phase, which can get local release builds killed before Rollup
+      // starts rendering chunks.
+      '@mantine/core': path.resolve(__dirname, './src/vendor/mantine-core-lite.tsx'),
+      '@mantine/hooks': path.resolve(__dirname, './src/vendor/mantine-hooks-lite.ts'),
       // This fork does not enable BlockNote collaborative editing. The upstream
       // barrels import Yjs eagerly, so keep those unused paths out of local app
       // builds.

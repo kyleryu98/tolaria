@@ -33,15 +33,16 @@ build_node="$current_node"
 if [ "$current_major" -ge 25 ] && [ "${TOLARIA_BUILD_ALLOW_UNSTABLE_NODE:-0}" != "1" ]; then
   for candidate in \
     "${TOLARIA_STABLE_NODE:-}" \
-    /opt/homebrew/opt/node@24/bin/node \
     /opt/homebrew/opt/node@22/bin/node \
     /opt/homebrew/opt/node@20/bin/node \
-    /usr/local/opt/node@24/bin/node \
+    /opt/homebrew/opt/node@24/bin/node \
     /usr/local/opt/node@22/bin/node \
     /usr/local/opt/node@20/bin/node \
-    "$HOME"/.nvm/versions/node/v24*/bin/node \
+    /usr/local/opt/node@24/bin/node \
+    "$HOME"/.nvm/versions/node/v22.22.1/bin/node \
     "$HOME"/.nvm/versions/node/v22*/bin/node \
     "$HOME"/.nvm/versions/node/v20*/bin/node \
+    "$HOME"/.nvm/versions/node/v24*/bin/node \
     /Users/yongtaek/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node
   do
     if build_node_candidate="$(stable_node_candidate "$candidate")"; then
