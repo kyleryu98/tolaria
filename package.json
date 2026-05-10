@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && pnpm vite:build",
+    "build": "NODE_OPTIONS=--max-old-space-size=8192 sh scripts/run-vite-build.sh && tsc -b",
     "vite:build": "NODE_OPTIONS=--max-old-space-size=8192 sh scripts/run-vite-build.sh",
     "agent-docs": "node scripts/build-agent-docs.mjs",
     "bundle-mcp": "node scripts/bundle-mcp-server.mjs",

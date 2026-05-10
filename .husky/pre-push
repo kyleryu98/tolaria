@@ -136,11 +136,12 @@ fi
 
 # ── 0. TypeScript + Vite build ──────────────────────────────────────────
 echo ""
-echo "📦 [0/5] TypeScript + Vite build..."
-pnpm exec tsc --noEmit
-# TypeScript is checked explicitly above; run Vite directly here to avoid
-# paying for the package build script's duplicate `tsc -b` pass.
+echo "📦 [0/5] Vite build + TypeScript..."
+# Run Vite before TypeScript in local hooks. On constrained macOS desktops,
+# the TypeScript pass can leave enough pressure behind that the large editor
+# graph gets terminated before Vite reaches chunk rendering.
 pnpm vite:build
+pnpm exec tsc --noEmit
 echo "  ✅ Build OK"
 
 # ── 1. Frontend coverage (≥70%) — includes all unit tests ───────────────
