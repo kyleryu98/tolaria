@@ -1,12 +1,21 @@
 import { useEffect, useState } from 'react'
 import { CalendarBlank } from '@phosphor-icons/react/CalendarBlank'
-import { format } from 'date-fns/format'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { parseDateFilterInput } from '@/utils/filterDates'
 
 const DATE_PREVIEW_DEBOUNCE_MS = 250
+const LONG_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric' })
+const SHORT_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+
+function padDatePart(value: number): string {
+  return String(value).padStart(2, '0')
+}
+
+function formatDateInputValue(value: Date): string {
+  return `${value.getFullYear()}-${padDatePart(value.getMonth() + 1)}-${padDatePart(value.getDate())}`
+}
 
 export function DateValueInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const selected = value ? parseDateFilterInput(value) ?? undefined : undefined
@@ -21,10 +30,11 @@ export function DateValueInput({ value, onChange }: { value: string; onChange: (
   const previewValue = showPreview ? debouncedValue.trim() : ''
   const resolvedPreview = previewValue ? parseDateFilterInput(previewValue) : null
   const previewLabel = resolvedPreview
-    ? format(resolvedPreview, 'MMMM d, yyyy')
+    ? LONG_DATE_FORMATTER.format(resolvedPreview)
     : previewValue
       ? 'Not recognized'
       : null
+  const selectedLabel = selected ? SHORT_DATE_FORMATTER.format(selected) : null
 
   return (
     <div className="flex flex-1 min-w-0 flex-col gap-1">
@@ -49,8 +59,8 @@ export function DateValueInput({ value, onChange }: { value: string; onChange: (
               size="sm"
               data-testid="date-picker-trigger"
               className="h-8 w-8 shrink-0 px-0"
-              title={selected ? format(selected, 'MMM d, yyyy') : 'Pick a date'}
-              aria-label={selected ? `Open date picker (${format(selected, 'MMM d, yyyy')})` : 'Open date picker'}
+              title={selectedLabel ?? 'Pick a date'}
+              aria-label={selectedLabel ? `Open date picker (${selectedLabel})` : 'Open date picker'}
             >
               <CalendarBlank size={14} className="shrink-0 text-muted-foreground" />
             </Button>
@@ -59,7 +69,7 @@ export function DateValueInput({ value, onChange }: { value: string; onChange: (
             <Input
               className="h-8 min-w-[8.75rem] font-mono text-[13px] tabular-nums"
               type="date"
-              value={selected ? format(selected, 'yyyy-MM-dd') : ''}
+              value={selected ? formatDateInputValue(selected) : ''}
               onChange={(event) => onChange(event.target.value)}
               data-testid="date-picker-input"
             />

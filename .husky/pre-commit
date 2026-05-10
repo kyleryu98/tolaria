@@ -78,7 +78,12 @@ fi
 
 # Unit tests
 echo "  → tests..."
-pnpm exec vitest run --silent
+STAGED_TESTS=$(echo "$STAGED_TS" | grep -E '\.(test|spec)\.(ts|tsx)$' || true)
+if [ -n "$STAGED_TESTS" ]; then
+  pnpm exec vitest run $STAGED_TESTS --silent --maxWorkers=2
+else
+  echo "    no staged test files; full suite runs in pre-push/CI"
+fi
 
 echo "✅ Pre-commit passed"
 

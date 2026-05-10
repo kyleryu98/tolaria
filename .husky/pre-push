@@ -47,7 +47,7 @@ ensure_node_tooling() {
   fi
 }
 
-require_main_push() {
+require_main_branch() {
   if ! git symbolic-ref -q HEAD >/dev/null 2>&1; then
     echo "❌ Pushes must happen from main. Detached HEAD is not allowed."
     exit 1
@@ -58,7 +58,9 @@ require_main_push() {
     echo "❌ Pushes must happen from main. Current branch: $CURRENT_BRANCH"
     exit 1
   fi
+}
 
+require_push_refs() {
   while IFS=' ' read -r LOCAL_REF LOCAL_SHA REMOTE_REF REMOTE_SHA; do
     [ -z "$LOCAL_REF" ] && continue
 
@@ -78,12 +80,7 @@ $PUSH_INPUT
 EOF
 }
 
-if [ -t 0 ]; then
-  PUSH_INPUT=""
-else
-  PUSH_INPUT=$(cat)
-fi
-require_main_push
+require_main_branch
 ensure_node_tooling
 
 START_TIME=$(date +%s)
@@ -140,9 +137,16 @@ echo "📦 [0/5] Vite build + TypeScript..."
 # Run Vite before TypeScript in local hooks. On constrained macOS desktops,
 # the TypeScript pass can leave enough pressure behind that the large editor
 # graph gets terminated before Vite reaches chunk rendering.
-pnpm vite:build
+NODE_OPTIONS=--max-old-space-size=8192 sh scripts/run-vite-build.sh
 pnpm exec tsc --noEmit
 echo "  ✅ Build OK"
+
+if [ -t 0 ]; then
+  PUSH_INPUT=""
+else
+  PUSH_INPUT=$(cat)
+fi
+require_push_refs
 
 # ── 1. Frontend coverage (≥70%) — includes all unit tests ───────────────
 echo ""

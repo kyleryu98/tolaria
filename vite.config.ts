@@ -956,6 +956,36 @@ export default defineConfig({
       // highlighting graphs. Keep Rollup from fanning out too many reads at
       // once so local Tauri release builds stay below common memory ceilings.
       maxParallelFileOps: 1,
+      output: {
+        manualChunks(id) {
+          if (!id.includes('/node_modules/')) return undefined
+          if (id.includes('/@blocknote/') || id.includes('/@tiptap/') || id.includes('/prosemirror-')) {
+            return 'editor-vendor'
+          }
+          if (id.includes('/@codemirror/') || id.includes('/@lezer/')) {
+            return 'codemirror-vendor'
+          }
+          if (id.includes('/@shikijs/') || id.includes('/katex/')) {
+            return 'syntax-vendor'
+          }
+          if (id.includes('/@tauri-apps/')) {
+            return 'tauri-vendor'
+          }
+          if (id.includes('/@floating-ui/')) {
+            return 'react-vendor'
+          }
+          if (id.includes('/@phosphor-icons/') || id.includes('/lucide-react/')) {
+            return 'icon-vendor'
+          }
+          if (id.includes('/react/') || id.includes('/react-dom/') || id.includes('/scheduler/')) {
+            return 'react-vendor'
+          }
+          if (id.includes('/date-fns/')) {
+            return 'date-vendor'
+          }
+          return 'vendor'
+        },
+      },
     },
   },
 
