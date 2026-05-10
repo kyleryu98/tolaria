@@ -56,7 +56,14 @@ pub(crate) fn version_for_binary(binary: &Path) -> Option<String> {
         .output()
         .ok()
         .filter(|output| output.status.success())
-        .map(|output| String::from_utf8_lossy(&output.stdout).trim().to_string())
+        .and_then(|output| {
+            let version = String::from_utf8_lossy(&output.stdout).trim().to_string();
+            if version.is_empty() {
+                None
+            } else {
+                Some(version)
+            }
+        })
 }
 
 pub(crate) fn command_target_avoiding_windows_cmd_shim(
@@ -406,6 +413,19 @@ mod tests {
         assert!(message.contains("Failed to start codex"));
         assert!(message.contains("/opt/homebrew/bin"));
         assert!(message.contains("Node.js"));
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn version_for_binary_treats_blank_version_output_as_unavailable() {
+        use std::os::unix::fs::PermissionsExt;
+
+        let dir = tempfile::tempdir().unwrap();
+        let binary = dir.path().join("codex");
+        std::fs::write(&binary, "#!/bin/sh\nexit 0\n").unwrap();
+        std::fs::set_permissions(&binary, std::fs::Permissions::from_mode(0o755)).unwrap();
+
+        assert_eq!(version_for_binary(&binary), None);
     }
 
     #[cfg(unix)]
