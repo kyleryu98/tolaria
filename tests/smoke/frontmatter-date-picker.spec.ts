@@ -1,4 +1,4 @@
-import { test, expect, type Locator, type Page } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 import fs from 'fs'
 import path from 'path'
 import {
@@ -20,23 +20,6 @@ function alphaProjectPath(vaultPath: string): string {
 function seedDateProperty(notePath: string, value: string): void {
   const content = fs.readFileSync(notePath, 'utf8')
   fs.writeFileSync(notePath, content.replace('Status: Active\n', `Status: Active\nDate: ${value}\n`))
-}
-
-async function calendarDay(page: Page, year: number, monthIndex: number, day: number): Promise<Locator> {
-  const dateLabel = await page.evaluate(
-    ({ y, m, d }) => new Date(y, m, d).toLocaleDateString(),
-    { y: year, m: monthIndex, d: day },
-  )
-  return page.locator(`button[data-day="${dateLabel}"]`).first()
-}
-
-async function chooseCalendarOption(page: Page, calendar: Locator, index: number, optionName: string): Promise<void> {
-  const trigger = calendar.getByRole('combobox').nth(index)
-  await expect(trigger).toBeVisible()
-  await trigger.click()
-  const option = page.getByRole('option', { name: optionName, exact: true })
-  await expect(option).toBeVisible()
-  await option.click()
 }
 
 test.describe('Frontmatter date picker', () => {
@@ -70,13 +53,14 @@ test.describe('Frontmatter date picker', () => {
     expect(popoverBox?.y).toBeGreaterThanOrEqual((rowBox?.y ?? 0) + (rowBox?.height ?? 0) - 1)
     expect((popoverBox?.x ?? 0) + (popoverBox?.width ?? 0)).toBeLessThanOrEqual((triggerBox?.x ?? 0) + (triggerBox?.width ?? 0) + 2)
 
-    await expect(await calendarDay(page, 2026, 3, 29)).toHaveAttribute('data-selected-single', 'true')
-    await (await calendarDay(page, 2026, 3, 30)).click()
+    const nativeDateInput = page.getByTestId('date-picker-calendar')
+    await expect(nativeDateInput).toHaveValue('2026-04-29')
+    await nativeDateInput.fill('2026-04-30')
 
     await expect.poll(() => fs.readFileSync(notePath, 'utf8')).toMatch(/Date: "?2026-04-30"?/)
   })
 
-  test('month and year controls change the visible calendar page', async ({ page }) => {
+  test('native date input updates the date property across month and year', async ({ page }) => {
     const notePath = alphaProjectPath(tempVaultDir)
 
     await page.getByTestId('note-list-container').getByText('Alpha Project', { exact: true }).click()
@@ -87,14 +71,13 @@ test.describe('Frontmatter date picker', () => {
     const dateRow = page.getByTestId('editable-property').filter({ hasText: 'Date' })
     await dateRow.getByTestId('date-display').click()
 
-    const calendar = page.getByTestId('date-picker-calendar')
-    await expect(calendar).toBeVisible()
-    await chooseCalendarOption(page, calendar, 0, 'May')
-    const lastWeekDayBox = await (await calendarDay(page, 2026, 4, 31)).boundingBox()
+    const nativeDateInput = page.getByTestId('date-picker-calendar')
+    await expect(nativeDateInput).toBeVisible()
+    await expect(nativeDateInput).toHaveValue('2026-04-29')
     const clearButtonBox = await page.getByTestId('date-picker-clear').boundingBox()
-    expect(clearButtonBox?.y).toBeGreaterThanOrEqual((lastWeekDayBox?.y ?? 0) + (lastWeekDayBox?.height ?? 0) - 1)
-    await chooseCalendarOption(page, calendar, 1, '2027')
-    await (await calendarDay(page, 2027, 4, 13)).click()
+    const inputBox = await nativeDateInput.boundingBox()
+    expect(clearButtonBox?.y).toBeGreaterThanOrEqual((inputBox?.y ?? 0) + (inputBox?.height ?? 0) - 1)
+    await nativeDateInput.fill('2027-05-13')
 
     await expect.poll(() => fs.readFileSync(notePath, 'utf8')).toMatch(/Date: "?2027-05-13"?/)
   })

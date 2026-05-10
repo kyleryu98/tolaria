@@ -71,17 +71,22 @@ fi
 # Lint + types (only if TS files staged)
 STAGED_TS=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx)$' || true)
 if [ -n "$STAGED_TS" ]; then
-  echo "  → lint + tsc..."
-  pnpm lint --quiet
-  npx tsc --noEmit
+  echo "  → lint staged TS + tsc..."
+  pnpm exec eslint --quiet $STAGED_TS
+  pnpm exec tsc --noEmit
 fi
 
 # Unit tests
 echo "  → tests..."
-STAGED_TESTS=$(echo "$STAGED_TS" | grep -E '\.(test|spec)\.(ts|tsx)$' || true)
-if [ -n "$STAGED_TESTS" ]; then
-  pnpm exec vitest run $STAGED_TESTS --silent --maxWorkers=2
-else
+STAGED_VITEST_TESTS=$(echo "$STAGED_TS" | grep -E '\.(test|spec)\.(ts|tsx)$' | grep -v '^tests/smoke/' || true)
+STAGED_SMOKE_TESTS=$(echo "$STAGED_TS" | grep -E '^tests/smoke/.*\.spec\.ts$' || true)
+if [ -n "$STAGED_VITEST_TESTS" ]; then
+  pnpm exec vitest run $STAGED_VITEST_TESTS --silent --maxWorkers=2
+fi
+if [ -n "$STAGED_SMOKE_TESTS" ]; then
+  echo "    staged smoke specs detected; full smoke suite runs in pre-push/CI"
+fi
+if [ -z "$STAGED_VITEST_TESTS" ] && [ -z "$STAGED_SMOKE_TESTS" ]; then
   echo "    no staged test files; full suite runs in pre-push/CI"
 fi
 
