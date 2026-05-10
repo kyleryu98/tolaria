@@ -237,7 +237,8 @@ function useCancelAutoSave(autoSaveTimerRef: MutableRefObject<ReturnType<typeof 
 }
 
 function persistenceScopeKey(scope?: string | readonly string[]): string {
-  if (!Array.isArray(scope)) return scope ?? ''
+  if (scope === undefined) return ''
+  if (typeof scope === 'string') return scope
   return [...scope].sort().join('\0')
 }
 
