@@ -434,16 +434,14 @@ mod tests {
         let result = git_commit(vp, "update flow").unwrap();
         assert!(
             result.contains("1 file changed") || result.contains("flow.md"),
-            "Commit output should reference the changed file: {}",
-            result
+            "Commit output should reference the changed file: {result}"
         );
 
         // After commit, get_modified_files should return empty
         let after = get_modified_files(vp).unwrap();
         assert!(
             after.is_empty(),
-            "No modified files should remain after commit, found: {:?}",
-            after
+            "No modified files should remain after commit, found: {after:?}"
         );
     }
 
@@ -515,8 +513,7 @@ mod tests {
         let result = discard_file_changes(vp, "../../../etc/passwd");
         assert!(
             result.is_err(),
-            "Should reject path outside vault, got: {:?}",
-            result
+            "Should reject path outside vault, got: {result:?}"
         );
         assert!(
             result.unwrap_err().contains("outside the vault"),

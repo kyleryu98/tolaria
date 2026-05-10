@@ -62,18 +62,18 @@ fn load_at(path: &PathBuf) -> Result<VaultList, String> {
         return Ok(VaultList::default());
     }
     let content =
-        fs::read_to_string(path).map_err(|e| format!("Failed to read vault list: {}", e))?;
-    serde_json::from_str(&content).map_err(|e| format!("Failed to parse vault list: {}", e))
+        fs::read_to_string(path).map_err(|e| format!("Failed to read vault list: {e}"))?;
+    serde_json::from_str(&content).map_err(|e| format!("Failed to parse vault list: {e}"))
 }
 
 fn save_at(path: &PathBuf, list: &VaultList) -> Result<(), String> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
-            .map_err(|e| format!("Failed to create config directory: {}", e))?;
+            .map_err(|e| format!("Failed to create config directory: {e}"))?;
     }
     let json = serde_json::to_string_pretty(list)
-        .map_err(|e| format!("Failed to serialize vault list: {}", e))?;
-    fs::write(path, json).map_err(|e| format!("Failed to write vault list: {}", e))
+        .map_err(|e| format!("Failed to serialize vault list: {e}"))?;
+    fs::write(path, json).map_err(|e| format!("Failed to write vault list: {e}"))
 }
 
 pub fn load_vault_list() -> Result<VaultList, String> {

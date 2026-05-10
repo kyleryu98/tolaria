@@ -17,8 +17,8 @@ import {
 } from '@blocknote/react'
 import { components } from '@blocknote/mantine'
 import { MantineContext, MantineProvider } from '@mantine/core'
-import { Copy } from '@phosphor-icons/react'
-import { ExternalLink } from 'lucide-react'
+import { Copy } from '@phosphor-icons/react/Copy'
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link.js'
 import { useDocumentThemeMode } from '../hooks/useDocumentThemeMode'
 import { useEditorTheme } from '../hooks/useTheme'
 import { useImageDrop } from '../hooks/useImageDrop'
@@ -218,8 +218,8 @@ function SharedContextBlockNoteView(props: React.ComponentProps<typeof BlockNote
 
   return (
     <MantineProvider
-      // BlockNote scopes Mantine defaults under `.bn-mantine` instead of `:root`.
-      withCssVariables={false}
+      // The app imports only the Mantine CSS files BlockNote actually uses, so
+      // the provider needs to emit Mantine CSS variables at runtime.
       getStyleNonce={getRuntimeStyleNonce}
       getRootElement={() => undefined}
     >

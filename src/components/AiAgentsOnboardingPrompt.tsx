@@ -1,4 +1,10 @@
-import { ArrowUpRight, Bot, CheckCircle2, Cloud, HardDrive, Loader2, Terminal } from 'lucide-react'
+import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right.js'
+import Bot from 'lucide-react/dist/esm/icons/bot.js'
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2.js'
+import Cloud from 'lucide-react/dist/esm/icons/cloud.js'
+import HardDrive from 'lucide-react/dist/esm/icons/hard-drive.js'
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2.js'
+import Terminal from 'lucide-react/dist/esm/icons/terminal.js'
 import {
   AI_AGENT_DEFINITIONS,
   getAiAgentDefinition,

@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef } from 'react'
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from 'react'
-import { Trash } from '@phosphor-icons/react'
+import { Trash } from '@phosphor-icons/react/Trash'
 import {
   Dialog,
   DialogContent,

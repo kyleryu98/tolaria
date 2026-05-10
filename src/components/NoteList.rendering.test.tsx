@@ -175,6 +175,12 @@ describe('NoteList rendering', () => {
     expect(onCreateNote).toHaveBeenCalledWith(undefined)
   })
 
+  it('passes the selected folder path when creating a note from a folder view', () => {
+    const { onCreateNote } = renderNoteList({ selection: { kind: 'folder', path: 'Game Dev' } })
+    fireEvent.click(screen.getByTitle('Create new note'))
+    expect(onCreateNote).toHaveBeenCalledWith(undefined, 'Game Dev')
+  })
+
   it('pins the current entity and shows grouped children', () => {
     renderNoteList({ selection: { kind: 'entity', entry: mockEntries[0] } })
     expect(screen.getAllByText('Build Laputa App').length).toBeGreaterThanOrEqual(1)

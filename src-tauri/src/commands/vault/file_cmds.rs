@@ -195,14 +195,14 @@ pub fn create_vault_folder(vault_path: PathBuf, folder_name: PathBuf) -> Result<
         validate_folder_name(folder_name.as_ref())?;
         ensure_missing_folder(&folder_path, folder_name.as_ref())?;
         std::fs::create_dir_all(&folder_path)
-            .map_err(|e| format!("Failed to create folder: {}", e))?;
+            .map_err(|e| format!("Failed to create folder: {e}"))?;
         Ok(folder_name.into_owned())
     })
 }
 
 fn ensure_missing_folder(folder_path: &Path, folder_name: &str) -> Result<(), String> {
     if folder_path.exists() {
-        return Err(format!("Folder '{}' already exists", folder_name));
+        return Err(format!("Folder '{folder_name}' already exists"));
     }
     Ok(())
 }

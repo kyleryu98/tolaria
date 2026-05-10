@@ -1,4 +1,7 @@
-import { ArrowUpRight, Bot, CheckCircle2, Loader2 } from 'lucide-react'
+import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right.js'
+import Bot from 'lucide-react/dist/esm/icons/bot.js'
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2.js'
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2.js'
 import type { ClaudeCodeStatus } from '../hooks/useClaudeCodeStatus'
 import { openExternalUrl } from '../utils/url'
 import { Button } from './ui/button'

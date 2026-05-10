@@ -1,6 +1,13 @@
 import { type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Megaphone } from '@phosphor-icons/react'
-import { ArrowUpRight, Bug, Check, Copy, GitPullRequest, Lightbulb, MessagesSquare, Newspaper } from 'lucide-react'
+import { Megaphone } from '@phosphor-icons/react/Megaphone'
+import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right.js'
+import Bug from 'lucide-react/dist/esm/icons/bug.js'
+import Check from 'lucide-react/dist/esm/icons/check.js'
+import Copy from 'lucide-react/dist/esm/icons/copy.js'
+import GitPullRequest from 'lucide-react/dist/esm/icons/git-pull-request.js'
+import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.js'
+import MessagesSquare from 'lucide-react/dist/esm/icons/messages-square.js'
+import Newspaper from 'lucide-react/dist/esm/icons/newspaper.js'
 import { Button } from '@/components/ui/button'
 import {
   Card,

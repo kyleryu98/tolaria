@@ -44,15 +44,13 @@ import {
   CheckIcon as MantineCheckIcon,
   Menu as MantineMenu,
 } from '@mantine/core'
-import {
-  Bold,
-  ChevronDown,
-  Code2,
-  ExternalLink,
-  Italic,
-  Strikethrough,
-  type LucideIcon,
-} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import Bold from 'lucide-react/dist/esm/icons/bold.js'
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.js'
+import Code2 from 'lucide-react/dist/esm/icons/code-2.js'
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link.js'
+import Italic from 'lucide-react/dist/esm/icons/italic.js'
+import Strikethrough from 'lucide-react/dist/esm/icons/strikethrough.js'
 import {
   filterTolariaFormattingToolbarItems,
   getTolariaBlockTypeSelectItems,

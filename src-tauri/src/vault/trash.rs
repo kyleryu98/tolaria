@@ -6,13 +6,13 @@ use std::path::Path;
 pub fn delete_note(path: &str) -> Result<String, String> {
     let file = Path::new(path);
     if !file.exists() {
-        return Err(format!("File does not exist: {}", path));
+        return Err(format!("File does not exist: {path}"));
     }
     if !file.is_file() {
-        return Err(format!("Path is not a file: {}", path));
+        return Err(format!("Path is not a file: {path}"));
     }
-    fs::remove_file(file).map_err(|e| format!("Failed to delete {}: {}", path, e))?;
-    log::info!("Permanently deleted note: {}", path);
+    fs::remove_file(file).map_err(|e| format!("Failed to delete {path}: {e}"))?;
+    log::info!("Permanently deleted note: {path}");
     Ok(path.to_string())
 }
 
@@ -24,16 +24,16 @@ pub fn batch_delete_notes(paths: &[String]) -> Result<Vec<String>, String> {
     for path in paths {
         let file = Path::new(path.as_str());
         if !file.exists() {
-            log::warn!("File does not exist, skipping: {}", path);
+            log::warn!("File does not exist, skipping: {path}");
             continue;
         }
         match fs::remove_file(file) {
             Ok(()) => {
-                log::info!("Permanently deleted note: {}", path);
+                log::info!("Permanently deleted note: {path}");
                 deleted.push(path.clone());
             }
             Err(e) => {
-                log::warn!("Failed to delete {}: {}", path, e);
+                log::warn!("Failed to delete {path}: {e}");
             }
         }
     }

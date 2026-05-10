@@ -44,6 +44,8 @@ use std::sync::Mutex;
 
 #[cfg(windows)]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
+#[cfg(desktop)]
+const INITIAL_WS_BRIDGE_STARTUP_DELAY: std::time::Duration = std::time::Duration::from_secs(3);
 
 pub(crate) fn hidden_command(program: impl AsRef<OsStr>) -> Command {
     let mut command = Command::new(program);
@@ -69,8 +71,8 @@ struct AllowedAssetScopeRoots(Mutex<Vec<PathBuf>>);
 #[cfg(desktop)]
 fn log_startup_result(label: &str, result: Result<usize, String>) {
     match result {
-        Ok(n) if n > 0 => log::info!("{}: {} files", label, n),
-        Err(e) => log::warn!("{}: {}", label, e),
+        Ok(n) if n > 0 => log::info!("{label}: {n} files"),
+        Err(e) => log::warn!("{label}: {e}"),
         _ => {}
     }
 }
@@ -199,7 +201,7 @@ fn sync_ws_bridge_for_selected_vault(app_handle: &tauri::AppHandle) {
     let vault_path = match vault_list::load_vault_list() {
         Ok(vault_list) => selected_mcp_bridge_vault_path(&vault_list),
         Err(e) => {
-            log::warn!("Failed to load active vault for ws-bridge startup: {}", e);
+            log::warn!("Failed to load active vault for ws-bridge startup: {e}");
             None
         }
     };
@@ -210,7 +212,7 @@ fn sync_ws_bridge_for_selected_vault(app_handle: &tauri::AppHandle) {
     };
 
     if let Err(e) = sync_ws_bridge_for_vault(app_handle, Some(&vault_path)) {
-        log::warn!("Failed to start ws-bridge: {}", e);
+        log::warn!("Failed to start ws-bridge: {e}");
     }
 }
 
@@ -218,6 +220,7 @@ fn sync_ws_bridge_for_selected_vault(app_handle: &tauri::AppHandle) {
 fn spawn_initial_ws_bridge_sync(app: &tauri::App) {
     let app_handle = app.handle().clone();
     spawn_background_task("tolaria-ws-bridge-startup", move || {
+        std::thread::sleep(INITIAL_WS_BRIDGE_STARTUP_DELAY);
         sync_ws_bridge_for_selected_vault(&app_handle);
     });
 }

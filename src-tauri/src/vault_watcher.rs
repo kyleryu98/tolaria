@@ -115,7 +115,7 @@ mod desktop {
             paths,
         };
         if let Err(err) = app.emit(VAULT_CHANGED_EVENT, payload) {
-            log::warn!("Failed to emit vault watcher event: {}", err);
+            log::warn!("Failed to emit vault watcher event: {err}");
         }
     }
 
@@ -140,7 +140,7 @@ mod desktop {
         let event_app = app.clone();
         let mut watcher = recommended_watcher(move |event| match event {
             Ok(event) => emit_vault_change(&event_app, &event_vault_path, event),
-            Err(err) => log::warn!("Vault watcher event failed: {}", err),
+            Err(err) => log::warn!("Vault watcher event failed: {err}"),
         })
         .map_err(|err| format!("Failed to create vault watcher: {err}"))?;
         watcher

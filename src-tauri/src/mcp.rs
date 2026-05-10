@@ -968,11 +968,10 @@ mod tests {
     #[test]
     fn find_node_returns_valid_path() {
         let node = find_node().unwrap();
-        assert!(node.exists(), "node binary should exist at {:?}", node);
+        assert!(node.exists(), "node binary should exist at {node:?}");
         assert!(
             node.to_string_lossy().contains("node"),
-            "path should contain 'node': {:?}",
-            node
+            "path should contain 'node': {node:?}"
         );
     }
 

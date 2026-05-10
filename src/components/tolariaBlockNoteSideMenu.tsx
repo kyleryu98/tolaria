@@ -15,7 +15,8 @@ import {
   useExtensionState,
   type SideMenuProps,
 } from '@blocknote/react'
-import { GripVertical, Plus } from 'lucide-react'
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical.js'
+import Plus from 'lucide-react/dist/esm/icons/plus.js'
 import {
   useCallback,
   useLayoutEffect,

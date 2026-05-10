@@ -4,31 +4,29 @@ import {
   type DefaultReactSuggestionItem,
 } from '@blocknote/react'
 import { createElement, type ReactElement } from 'react'
-import {
-  CodeBlock,
-  File,
-  FlowArrow,
-  ImageSquare,
-  ListBullets,
-  ListChecks,
-  ListNumbers,
-  Minus,
-  Pi,
-  Paragraph,
-  Quotes,
-  ScribbleLoop,
-  Smiley,
-  SpeakerHigh,
-  Table,
-  TextHOne,
-  TextHTwo,
-  TextHThree,
-  TextHFour,
-  TextHFive,
-  TextHSix,
-  Video,
-  type Icon as PhosphorIcon,
-} from '@phosphor-icons/react'
+import { CodeBlock } from '@phosphor-icons/react/CodeBlock'
+import { File } from '@phosphor-icons/react/File'
+import { FlowArrow } from '@phosphor-icons/react/FlowArrow'
+import { ImageSquare } from '@phosphor-icons/react/ImageSquare'
+import { ListBullets } from '@phosphor-icons/react/ListBullets'
+import { ListChecks } from '@phosphor-icons/react/ListChecks'
+import { ListNumbers } from '@phosphor-icons/react/ListNumbers'
+import { Minus } from '@phosphor-icons/react/Minus'
+import { Pi } from '@phosphor-icons/react/Pi'
+import { Paragraph } from '@phosphor-icons/react/Paragraph'
+import { Quotes } from '@phosphor-icons/react/Quotes'
+import { ScribbleLoop } from '@phosphor-icons/react/ScribbleLoop'
+import { Smiley } from '@phosphor-icons/react/Smiley'
+import { SpeakerHigh } from '@phosphor-icons/react/SpeakerHigh'
+import { Table } from '@phosphor-icons/react/Table'
+import { TextHOne } from '@phosphor-icons/react/TextHOne'
+import { TextHTwo } from '@phosphor-icons/react/TextHTwo'
+import { TextHThree } from '@phosphor-icons/react/TextHThree'
+import { TextHFour } from '@phosphor-icons/react/TextHFour'
+import { TextHFive } from '@phosphor-icons/react/TextHFive'
+import { TextHSix } from '@phosphor-icons/react/TextHSix'
+import { Video } from '@phosphor-icons/react/Video'
+import type { Icon as PhosphorIcon } from '@phosphor-icons/react'
 import { trackEvent } from '../lib/telemetry'
 import { MATH_BLOCK_TYPE } from '../utils/mathMarkdown'
 import { MERMAID_BLOCK_TYPE, mermaidFenceSource } from '../utils/mermaidMarkdown'

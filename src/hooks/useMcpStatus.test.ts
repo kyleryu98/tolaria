@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { renderHook, act } from '@testing-library/react'
 import { useMcpStatus } from './useMcpStatus'
+import { STARTUP_INTEGRATION_CHECK_DELAY_MS } from './startupDefer'
 
 vi.mock('@tauri-apps/api/core', () => ({
   invoke: vi.fn(),
@@ -37,6 +38,13 @@ function mockClipboard(writeText = vi.fn(() => Promise.resolve())) {
   return writeText
 }
 
+async function advanceStartupCheck() {
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(STARTUP_INTEGRATION_CHECK_DELAY_MS + 1)
+  })
+  await act(async () => {})
+}
+
 function mockStatusFlow(
   initialStatus: 'installed' | 'not_installed',
   overrides: Partial<Record<'register_mcp_tools' | 'remove_mcp_tools', unknown>> = {},
@@ -55,9 +63,8 @@ function mockStatusFlow(
 async function renderReadySubject(initialStatus: 'installed' | 'not_installed') {
   const onToast = vi.fn()
   const hook = renderSubject(onToast)
-  await waitFor(() => {
-    expect(hook.result.current.mcpStatus).toBe(initialStatus)
-  })
+  await advanceStartupCheck()
+  expect(hook.result.current.mcpStatus).toBe(initialStatus)
   return { onToast, ...hook }
 }
 
@@ -88,9 +95,14 @@ async function runMutationScenario({
 
 describe('useMcpStatus', () => {
   beforeEach(() => {
+    vi.useFakeTimers()
     runtimeMock.isTauri = false
     vi.clearAllMocks()
     mockClipboard()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it('checks the active vault status without auto-registering on mount', async () => {
@@ -101,10 +113,11 @@ describe('useMcpStatus', () => {
     const { result } = renderSubject()
 
     expect(result.current.mcpStatus).toBe('checking')
+    expect(mockInvoke).not.toHaveBeenCalled()
 
-    await waitFor(() => {
-      expect(result.current.mcpStatus).toBe('installed')
-    })
+    await advanceStartupCheck()
+
+    expect(result.current.mcpStatus).toBe('installed')
 
     expect(mockInvoke).toHaveBeenCalledWith('check_mcp_status', { vaultPath: '/vault' })
     expect(mockInvoke).not.toHaveBeenCalledWith('register_mcp_tools', { vaultPath: '/vault' })
@@ -117,9 +130,9 @@ describe('useMcpStatus', () => {
 
     const { result } = renderSubject()
 
-    await waitFor(() => {
-      expect(result.current.mcpStatus).toBe('not_installed')
-    })
+    await advanceStartupCheck()
+
+    expect(result.current.mcpStatus).toBe('not_installed')
   })
 
   it.each([
@@ -184,9 +197,9 @@ describe('useMcpStatus', () => {
     })
     const { result } = renderSubject()
 
-    await waitFor(() => {
-      expect(result.current.mcpStatus).toBe('installed')
-    })
+    await advanceStartupCheck()
+
+    expect(result.current.mcpStatus).toBe('installed')
 
     await act(async () => {
       await result.current.loadMcpConfigSnippet()
@@ -207,9 +220,9 @@ describe('useMcpStatus', () => {
     })
     const { result } = renderSubject(onToast)
 
-    await waitFor(() => {
-      expect(result.current.mcpStatus).toBe('not_installed')
-    })
+    await advanceStartupCheck()
+
+    expect(result.current.mcpStatus).toBe('not_installed')
 
     await act(async () => {
       await expect(result.current.copyMcpConfig()).resolves.toBe(true)
@@ -232,9 +245,9 @@ describe('useMcpStatus', () => {
     })
     const { result } = renderSubject(onToast)
 
-    await waitFor(() => {
-      expect(result.current.mcpStatus).toBe('not_installed')
-    })
+    await advanceStartupCheck()
+
+    expect(result.current.mcpStatus).toBe('not_installed')
 
     await act(async () => {
       await expect(result.current.copyMcpConfig()).resolves.toBe(true)

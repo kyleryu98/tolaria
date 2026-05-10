@@ -305,7 +305,7 @@ interface UseNoteListInteractionStateParams {
   onOpenInNewWindow?: (entry: VaultEntry) => void
   onAutoTriggerDiff?: () => void
   onDiscardFile?: (relativePath: string) => Promise<void>
-  onCreateNote: (type?: string) => void
+  onCreateNote: (type?: string, folderPath?: string) => void
   onBulkArchive?: (paths: string[]) => void
   onBulkDeletePermanently?: (paths: string[]) => void
   locale: AppLocale
@@ -479,7 +479,7 @@ export interface NoteListProps {
   onSelectNote: (entry: VaultEntry) => void
   onReplaceActiveTab: (entry: VaultEntry) => void
   onEnterNeighborhood?: (entry: VaultEntry) => void
-  onCreateNote: (type?: string) => void
+  onCreateNote: (type?: string, folderPath?: string) => void
   onBulkArchive?: (paths: string[]) => void
   onBulkDeletePermanently?: (paths: string[]) => void
   onUpdateTypeSort?: (path: string, key: string, value: string | number | boolean | string[] | null) => void

@@ -21,7 +21,7 @@ pub fn get_file_history(vault_path: &str, file_path: &str) -> Result<Vec<GitComm
         ])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git log: {}", e))?;
+        .map_err(|e| format!("Failed to run git log: {e}"))?;
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
@@ -29,7 +29,7 @@ pub fn get_file_history(vault_path: &str, file_path: &str) -> Result<Vec<GitComm
         if stderr.contains("does not have any commits yet") {
             return Ok(Vec::new());
         }
-        return Err(format!("git log failed: {}", stderr));
+        return Err(format!("git log failed: {stderr}"));
     }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
@@ -71,7 +71,7 @@ pub fn get_file_diff(vault_path: &str, file_path: &str) -> Result<String, String
         .args(["diff", "--", &relative_str])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git diff: {}", e))?;
+        .map_err(|e| format!("Failed to run git diff: {e}"))?;
 
     let stdout = String::from_utf8_lossy(&output.stdout).to_string();
 
@@ -81,7 +81,7 @@ pub fn get_file_diff(vault_path: &str, file_path: &str) -> Result<String, String
             .args(["diff", "--cached", "--", &relative_str])
             .current_dir(vault)
             .output()
-            .map_err(|e| format!("Failed to run git diff --cached: {}", e))?;
+            .map_err(|e| format!("Failed to run git diff --cached: {e}"))?;
 
         let cached_stdout = String::from_utf8_lossy(&cached.stdout).to_string();
         if !cached_stdout.is_empty() {
@@ -93,14 +93,14 @@ pub fn get_file_diff(vault_path: &str, file_path: &str) -> Result<String, String
             .args(["status", "--porcelain", "--", &relative_str])
             .current_dir(vault)
             .output()
-            .map_err(|e| format!("Failed to run git status: {}", e))?;
+            .map_err(|e| format!("Failed to run git status: {e}"))?;
 
         let status_out = String::from_utf8_lossy(&status.stdout);
         if status_out.starts_with("??") {
             // Untracked file: show entire content as added
             let content =
-                std::fs::read_to_string(file).map_err(|e| format!("Failed to read file: {}", e))?;
-            let lines: Vec<String> = content.lines().map(|l| format!("+{}", l)).collect();
+                std::fs::read_to_string(file).map_err(|e| format!("Failed to read file: {e}"))?;
+            let lines: Vec<String> = content.lines().map(|l| format!("+{l}")).collect();
             return Ok(format!(
                 "diff --git a/{0} b/{0}\nnew file\n--- /dev/null\n+++ b/{0}\n@@ -0,0 +1,{1} @@\n{2}",
                 relative_str,
@@ -127,14 +127,14 @@ pub fn get_file_diff_at_commit(
     let output = git_command()
         .args([
             "diff",
-            &format!("{}^", commit_hash),
+            &format!("{commit_hash}^"),
             commit_hash,
             "--",
             &relative_str,
         ])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git diff: {}", e))?;
+        .map_err(|e| format!("Failed to run git diff: {e}"))?;
 
     let stdout = String::from_utf8_lossy(&output.stdout).to_string();
 
@@ -142,14 +142,14 @@ pub fn get_file_diff_at_commit(
     // Fall back to showing the full file content as added.
     if stdout.is_empty() {
         let show = git_command()
-            .args(["show", &format!("{}:{}", commit_hash, relative_str)])
+            .args(["show", &format!("{commit_hash}:{relative_str}")])
             .current_dir(vault)
             .output()
-            .map_err(|e| format!("Failed to run git show: {}", e))?;
+            .map_err(|e| format!("Failed to run git show: {e}"))?;
 
         if show.status.success() {
             let content = String::from_utf8_lossy(&show.stdout);
-            let lines: Vec<String> = content.lines().map(|l| format!("+{}", l)).collect();
+            let lines: Vec<String> = content.lines().map(|l| format!("+{l}")).collect();
             return Ok(format!(
                 "diff --git a/{0} b/{0}\nnew file\n--- /dev/null\n+++ b/{0}\n@@ -0,0 +1,{1} @@\n{2}",
                 relative_str,

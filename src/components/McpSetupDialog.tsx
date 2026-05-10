@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { Copy, ShieldCheck } from 'lucide-react'
+import Copy from 'lucide-react/dist/esm/icons/copy.js'
+import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check.js'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

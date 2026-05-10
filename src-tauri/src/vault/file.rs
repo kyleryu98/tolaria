@@ -145,7 +145,7 @@ fn validate_save_path(file_path: &Path, display_path: &str) -> Result<(), String
             .map(|m| m.permissions().readonly())
             .unwrap_or(false);
     if is_readonly {
-        return Err(format!("File is read-only: {}", display_path));
+        return Err(format!("File is read-only: {display_path}"));
     }
     Ok(())
 }
@@ -187,7 +187,7 @@ pub fn create_note_content(path: &str, content: &str) -> Result<(), String> {
         .create_new(true)
         .open(file_path)
         .map_err(|e| match e.kind() {
-            ErrorKind::AlreadyExists => format!("File already exists: {}", path),
+            ErrorKind::AlreadyExists => format!("File already exists: {path}"),
             _ => note_io_error(NoteIoOperation::Create, NotePathDisplay::new(path), &e),
         })?;
     file.write_all(content.as_bytes())

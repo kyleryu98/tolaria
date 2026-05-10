@@ -1,16 +1,14 @@
-import {
-  addDays,
-  addMonths,
-  addWeeks,
-  addYears,
-  isValid,
-  parseISO,
-  startOfDay,
-  subDays,
-  subMonths,
-  subWeeks,
-  subYears,
-} from 'date-fns'
+import { addDays } from 'date-fns/addDays'
+import { addMonths } from 'date-fns/addMonths'
+import { addWeeks } from 'date-fns/addWeeks'
+import { addYears } from 'date-fns/addYears'
+import { isValid } from 'date-fns/isValid'
+import { parseISO } from 'date-fns/parseISO'
+import { startOfDay } from 'date-fns/startOfDay'
+import { subDays } from 'date-fns/subDays'
+import { subMonths } from 'date-fns/subMonths'
+import { subWeeks } from 'date-fns/subWeeks'
+import { subYears } from 'date-fns/subYears'
 
 type RelativeUnit = 'day' | 'week' | 'month' | 'year'
 type DateFilterInput = string

@@ -1,5 +1,5 @@
 import type { VaultEntry } from '../../types'
-import { ArrowUpRight } from '@phosphor-icons/react'
+import { ArrowUpRight } from '@phosphor-icons/react/ArrowUpRight'
 import { entryStatusTitle } from './shared'
 import { StatusSuffix } from './LinkButton'
 import { NoteTitleIcon } from '../NoteTitleIcon'

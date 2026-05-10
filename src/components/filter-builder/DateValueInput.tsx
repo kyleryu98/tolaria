@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { CalendarBlank } from '@phosphor-icons/react'
-import { format } from 'date-fns'
+import { CalendarBlank } from '@phosphor-icons/react/CalendarBlank'
+import { format } from 'date-fns/format'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { parseDateFilterInput } from '@/utils/filterDates'
 
@@ -56,11 +55,13 @@ export function DateValueInput({ value, onChange }: { value: string; onChange: (
               <CalendarBlank size={14} className="shrink-0 text-muted-foreground" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={selected}
-              onSelect={(day) => onChange(day ? format(day, 'yyyy-MM-dd') : '')}
+          <PopoverContent className="w-auto p-2" align="start">
+            <Input
+              className="h-8 min-w-[8.75rem] font-mono text-[13px] tabular-nums"
+              type="date"
+              value={selected ? format(selected, 'yyyy-MM-dd') : ''}
+              onChange={(event) => onChange(event.target.value)}
+              data-testid="date-picker-input"
             />
           </PopoverContent>
         </Popover>

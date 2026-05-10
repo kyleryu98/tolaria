@@ -1,6 +1,7 @@
 import { useMemo, useCallback, useState, useRef, type ReactNode } from 'react'
 import type { VaultEntry } from '../../types'
-import { Plus, X } from '@phosphor-icons/react'
+import { Plus } from '@phosphor-icons/react/Plus'
+import { X } from '@phosphor-icons/react/X'
 import type { ParsedFrontmatter } from '../../utils/frontmatter'
 import { containsWikilinks } from '../DynamicPropertiesPanel'
 import type { FrontmatterValue } from '../Inspector'

@@ -4,9 +4,7 @@ import {
   useCallback,
   useMemo,
 } from 'react'
-import {
-  Plus,
-} from '@phosphor-icons/react'
+import { Plus } from '@phosphor-icons/react/Plus'
 import { Button } from '@/components/ui/button'
 import type { FolderNode, SidebarSelection } from '../types'
 import { FolderContextMenu } from './folder-tree/FolderContextMenu'

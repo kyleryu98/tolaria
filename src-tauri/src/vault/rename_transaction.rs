@@ -31,14 +31,14 @@ impl RenameWorkspace {
 
     pub(super) fn stage_note_content(&self, content: &str) -> Result<NamedTempFile, String> {
         let mut staged = NamedTempFile::new_in(&self.dir)
-            .map_err(|e| format!("Failed to create staged rename file: {}", e))?;
+            .map_err(|e| format!("Failed to create staged rename file: {e}"))?;
         staged
             .write_all(content.as_bytes())
-            .map_err(|e| format!("Failed to write staged rename file: {}", e))?;
+            .map_err(|e| format!("Failed to write staged rename file: {e}"))?;
         staged
             .as_file_mut()
             .sync_all()
-            .map_err(|e| format!("Failed to sync staged rename file: {}", e))?;
+            .map_err(|e| format!("Failed to sync staged rename file: {e}"))?;
         Ok(staged)
     }
 
@@ -149,7 +149,7 @@ impl<'a> RenameOperation<'a> {
             backup_path: self.backup_path.to_string_lossy().to_string(),
         };
         let data = serde_json::to_string(&transaction)
-            .map_err(|e| format!("Failed to serialize rename transaction: {}", e))?;
+            .map_err(|e| format!("Failed to serialize rename transaction: {e}"))?;
         fs::write(&self.manifest_path, data).map_err(|e| {
             format!(
                 "Failed to write rename transaction {}: {}",
@@ -232,7 +232,7 @@ pub(super) fn recover_pending_rename_transactions(vault: &Path) -> Result<(), St
 
     for entry in entries {
         let path = entry
-            .map_err(|e| format!("Failed to read rename transaction entry: {}", e))?
+            .map_err(|e| format!("Failed to read rename transaction entry: {e}"))?
             .path();
         if path.extension().and_then(|ext| ext.to_str()) != Some("json") {
             continue;

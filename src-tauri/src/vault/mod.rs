@@ -368,7 +368,7 @@ fn try_parse_file(
     };
     match result {
         Ok(vault_entry) => entries.push(vault_entry),
-        Err(e) => log::warn!("Skipping file: {}", e),
+        Err(e) => log::warn!("Skipping file: {e}"),
     }
 }
 

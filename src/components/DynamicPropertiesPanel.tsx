@@ -1,4 +1,4 @@
-import { Plus } from '@phosphor-icons/react'
+import { Plus } from '@phosphor-icons/react/Plus'
 import { useMemo, useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import type { VaultEntry } from '../types'

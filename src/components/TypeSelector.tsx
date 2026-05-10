@@ -1,4 +1,7 @@
-import { CaretUpDown, Check, StackSimple, WarningCircle } from '@phosphor-icons/react'
+import { CaretUpDown } from '@phosphor-icons/react/CaretUpDown'
+import { Check } from '@phosphor-icons/react/Check'
+import { StackSimple } from '@phosphor-icons/react/StackSimple'
+import { WarningCircle } from '@phosphor-icons/react/WarningCircle'
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import type { FrontmatterValue } from './Inspector'
 import { Button } from '@/components/ui/button'

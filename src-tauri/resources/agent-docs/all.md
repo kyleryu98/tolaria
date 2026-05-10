@@ -97,9 +97,9 @@ Tolaria publishes desktop builds for macOS, Windows, and Linux. macOS is the pri
 
 Use the latest stable release unless you are intentionally testing pre-release builds:
 
-- [Download the latest stable build](https://refactoringhq.github.io/tolaria/download/)
+- <a href="https://tolaria.md/download/" target="_self">Download the latest stable build</a>
 - [Browse all GitHub releases](https://github.com/refactoringhq/tolaria/releases)
-- [Read the release notes](/releases/)
+- <a href="https://tolaria.md/releases/" target="_self">Read the release notes</a>
 
 ## Homebrew
 
@@ -1461,55 +1461,3 @@ Resolve interrupted merges or corrupted repository state before retrying.
 ## Reload
 
 Run `Reload Vault` from the command palette. This clears derived cache and rescans the filesystem.
-
----
-
-# Download
-
-Source: download/index.md
-URL: /download/
-
-# Download
-
-Download Tolaria from the latest stable release.
-
-## Latest Stable
-
-[Open the installer download page](https://refactoringhq.github.io/tolaria/download/)
-
-The download page reads the latest stable release metadata and points you to the current macOS, Windows, or Linux artifact.
-
-## Other Builds
-
-- [Browse all GitHub releases](https://github.com/refactoringhq/tolaria/releases)
-- [Read release history](/releases/)
-- [Learn release channels](/reference/release-channels)
-
-## Verify The Version
-
-After launching the app, check the version shown in Tolaria's status bar or release surface.
-
----
-
-# Releases
-
-Source: releases/index.md
-URL: /releases/
-
-# Releases
-
-Tolaria releases are published on GitHub.
-
-- [Latest release](https://github.com/refactoringhq/tolaria/releases/latest)
-- [All releases](https://github.com/refactoringhq/tolaria/releases)
-- [Download page](/download/)
-
-## Release Channels
-
-Stable builds are intended for normal use. Pre-release builds may contain newer features and rougher edges.
-
-Tolaria also has an Alpha channel for builds generated from pushes to `main`. See [Release Channels](/reference/release-channels) before switching from Stable.
-
-## Before Updating
-
-Commit or push important vault changes before updating the app. Your notes are local files, but having a clean Git state makes recovery easier.

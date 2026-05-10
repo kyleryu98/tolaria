@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { CalendarIcon, Check, X } from 'lucide-react'
+import CalendarIcon from 'lucide-react/dist/esm/icons/calendar.js'
+import Check from 'lucide-react/dist/esm/icons/check.js'
+import X from 'lucide-react/dist/esm/icons/x.js'
 import {
   type PropertyDisplayMode,
   formatDateValue,
@@ -55,6 +56,7 @@ function AddBooleanInput({ value, locale, onChange }: { value: string; locale: A
 
 function AddDateInput({ value, locale, onChange }: { value: string; locale: AppLocale; onChange: (v: string) => void }) {
   const selectedDate = value ? parseDateValue(value) : undefined
+  const selectedIso = selectedDate ? dateToISO(selectedDate) : ''
   const formatted = value ? formatDateValue(value) : ''
   return (
     <Popover>
@@ -69,12 +71,13 @@ function AddDateInput({ value, locale, onChange }: { value: string; locale: AppL
           </span>
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start" side="bottom">
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={(day) => { if (day) onChange(dateToISO(day)) }}
-          defaultMonth={selectedDate}
+      <PopoverContent className="w-auto p-2" align="start" side="bottom">
+        <Input
+          className={ADD_INPUT_CLASS}
+          type="date"
+          value={selectedIso}
+          onChange={(event) => onChange(event.target.value)}
+          data-testid="add-property-date-input"
         />
       </PopoverContent>
     </Popover>

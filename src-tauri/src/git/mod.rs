@@ -228,7 +228,7 @@ pub fn ensure_gitignore(path: impl AsRef<Path>) -> Result<(), String> {
     let gitignore_path = path.as_ref().join(".gitignore");
     if !gitignore_path.exists() {
         std::fs::write(&gitignore_path, DEFAULT_GITIGNORE)
-            .map_err(|e| format!("Failed to write .gitignore: {}", e))?;
+            .map_err(|e| format!("Failed to write .gitignore: {e}"))?;
     }
     Ok(())
 }

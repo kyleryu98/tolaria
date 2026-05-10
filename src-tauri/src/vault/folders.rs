@@ -53,10 +53,10 @@ pub fn rename_folder(
     let source_path = vault_path.join(&relative_path);
 
     if !source_path.exists() {
-        return Err(format!("Folder does not exist: {}", folder_path));
+        return Err(format!("Folder does not exist: {folder_path}"));
     }
     if !source_path.is_dir() {
-        return Err(format!("Not a folder: {}", folder_path));
+        return Err(format!("Not a folder: {folder_path}"));
     }
 
     let current_name = source_path
@@ -86,7 +86,7 @@ pub fn rename_folder(
     }
 
     fs::rename(&source_path, &destination_path)
-        .map_err(|error| format!("Failed to rename folder: {}", error))?;
+        .map_err(|error| format!("Failed to rename folder: {error}"))?;
 
     Ok(FolderRenameResult {
         old_path: display_relative_path(&relative_path),
@@ -99,14 +99,14 @@ pub fn delete_folder(vault_path: &Path, folder_path: &str) -> Result<String, Str
     let target_path = vault_path.join(&relative_path);
 
     if !target_path.exists() {
-        return Err(format!("Folder does not exist: {}", folder_path));
+        return Err(format!("Folder does not exist: {folder_path}"));
     }
     if !target_path.is_dir() {
-        return Err(format!("Not a folder: {}", folder_path));
+        return Err(format!("Not a folder: {folder_path}"));
     }
 
     fs::remove_dir_all(&target_path)
-        .map_err(|error| format!("Failed to delete folder: {}", error))?;
+        .map_err(|error| format!("Failed to delete folder: {error}"))?;
     Ok(display_relative_path(&relative_path))
 }
 

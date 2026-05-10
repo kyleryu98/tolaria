@@ -1342,15 +1342,15 @@ describe('Sidebar', () => {
       expect(onUpdateViewDefinition).toHaveBeenCalledWith('active-projects.yml', { name: 'Today Focus' })
     })
 
-    it('opens the shared appearance panel from the context menu', () => {
+    it('opens the shared appearance panel from the context menu', async () => {
       const onUpdateViewDefinition = vi.fn()
       renderViewActions({ onUpdateViewDefinition })
       openViewContextMenu()
       fireEvent.click(screen.getByText('Customize icon & color…'))
 
-      fireEvent.click(screen.getByTitle('Blue'))
-      fireEvent.change(screen.getByPlaceholderText('Search icons…'), { target: { value: 'book' } })
-      fireEvent.click(screen.getByTitle('book'))
+      fireEvent.click(await screen.findByTitle('Blue'))
+      fireEvent.change(await screen.findByPlaceholderText('Search icons…'), { target: { value: 'book' } })
+      fireEvent.click(await screen.findByTitle('book'))
 
       expect(onUpdateViewDefinition).toHaveBeenCalledWith('active-projects.yml', { color: 'blue' })
       expect(onUpdateViewDefinition).toHaveBeenCalledWith('active-projects.yml', { icon: 'book' })

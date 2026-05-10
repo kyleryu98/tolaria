@@ -14,25 +14,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  GitBranch,
-  Code,
-  Sparkle,
-  ListBullets,
-  SidebarSimple,
-  Trash,
-  Archive,
-  ArrowUUpLeft,
-  ClipboardText,
-  FolderOpen,
-  MapTrifold,
-  Star,
-  CheckCircle,
-  ArrowsClockwise,
-  ArrowsInLineHorizontal,
-  ArrowsOutLineHorizontal,
-  DotsThree,
-} from '@phosphor-icons/react'
+import { GitBranch } from '@phosphor-icons/react/GitBranch'
+import { Code } from '@phosphor-icons/react/Code'
+import { Sparkle } from '@phosphor-icons/react/Sparkle'
+import { ListBullets } from '@phosphor-icons/react/ListBullets'
+import { SidebarSimple } from '@phosphor-icons/react/SidebarSimple'
+import { Trash } from '@phosphor-icons/react/Trash'
+import { Archive } from '@phosphor-icons/react/Archive'
+import { ArrowUUpLeft } from '@phosphor-icons/react/ArrowUUpLeft'
+import { ClipboardText } from '@phosphor-icons/react/ClipboardText'
+import { FolderOpen } from '@phosphor-icons/react/FolderOpen'
+import { MapTrifold } from '@phosphor-icons/react/MapTrifold'
+import { Star } from '@phosphor-icons/react/Star'
+import { CheckCircle } from '@phosphor-icons/react/CheckCircle'
+import { ArrowsClockwise } from '@phosphor-icons/react/ArrowsClockwise'
+import { ArrowsInLineHorizontal } from '@phosphor-icons/react/ArrowsInLineHorizontal'
+import { ArrowsOutLineHorizontal } from '@phosphor-icons/react/ArrowsOutLineHorizontal'
+import { DotsThree } from '@phosphor-icons/react/DotsThree'
 import { slugify } from '../hooks/useNoteCreation'
 import { useDragRegion } from '../hooks/useDragRegion'
 

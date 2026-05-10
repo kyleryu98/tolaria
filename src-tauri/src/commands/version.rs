@@ -36,7 +36,7 @@ fn parse_calendar_build_label(version: &str) -> Option<String> {
     match prerelease {
         Some(suffix) if suffix.starts_with("alpha.") => suffix
             .strip_prefix("alpha.")
-            .map(|sequence| format!("Alpha {}.{}", core_version, sequence)),
+            .map(|sequence| format!("Alpha {core_version}.{sequence}")),
         Some(suffix) if suffix.starts_with("stable.") => Some(core_version),
         Some(_) => None,
         None => Some(core_version),
@@ -51,10 +51,10 @@ fn parse_semver_build_label(version: &str) -> Option<String> {
     split_numeric_version_parts(core)?;
 
     match prerelease {
-        Some(suffix) if suffix.starts_with("alpha.") => Some(format!("Alpha {}", semver)),
-        Some(_) => Some(format!("v{}", semver)),
+        Some(suffix) if suffix.starts_with("alpha.") => Some(format!("Alpha {semver}")),
+        Some(_) => Some(format!("v{semver}")),
         None if semver == "0.1.0" || semver == "0.0.0" => Some("dev".to_string()),
-        None => Some(format!("v{}", semver)),
+        None => Some(format!("v{semver}")),
     }
 }
 

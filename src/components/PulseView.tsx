@@ -6,10 +6,15 @@ import { useDragRegion } from '../hooks/useDragRegion'
 import type { PulseCommit, PulseFile } from '../types'
 import { relativeDate } from '../utils/noteListHelpers'
 import { getLocaleDateLocale, translate, type AppLocale } from '../lib/i18n'
-import {
-  Plus, Minus, PencilSimple, GitCommit, ArrowSquareOut,
-  FileText, CaretDown, CaretRight, Pulse,
-} from '@phosphor-icons/react'
+import { Plus } from '@phosphor-icons/react/Plus'
+import { Minus } from '@phosphor-icons/react/Minus'
+import { PencilSimple } from '@phosphor-icons/react/PencilSimple'
+import { GitCommit } from '@phosphor-icons/react/GitCommit'
+import { ArrowSquareOut } from '@phosphor-icons/react/ArrowSquareOut'
+import { FileText } from '@phosphor-icons/react/FileText'
+import { CaretDown } from '@phosphor-icons/react/CaretDown'
+import { CaretRight } from '@phosphor-icons/react/CaretRight'
+import { Pulse } from '@phosphor-icons/react/Pulse'
 
 function tauriCall<T>(command: string, args: Record<string, unknown>): Promise<T> {
   return isTauri() ? invoke<T>(command, args) : mockInvoke<T>(command, args)

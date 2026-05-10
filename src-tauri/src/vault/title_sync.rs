@@ -59,7 +59,7 @@ pub fn sync_title_on_open(path: &Path) -> Result<SyncAction, String> {
             // Title absent or desynced — filename wins
             let value = FrontmatterValue::String(expected_title.clone());
             let updated = update_frontmatter_content(&content, "title", Some(value))
-                .map_err(|e| format!("Failed to update frontmatter: {}", e))?;
+                .map_err(|e| format!("Failed to update frontmatter: {e}"))?;
             fs::write(path, &updated)
                 .map_err(|e| format!("Failed to write {}: {}", path.display(), e))?;
             Ok(SyncAction::Updated {

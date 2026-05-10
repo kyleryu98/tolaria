@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { ReactNode } from 'react'
 import { DisplayModeSelector, SmartPropertyValueCell } from './PropertyValueCells'
 
-const { createValueButtonMock, calendarMockState } = vi.hoisted(() => ({
+const { createValueButtonMock } = vi.hoisted(() => ({
   createValueButtonMock:
     (testId: string, nextValue: (value: string) => string) =>
     ({ value, onSave }: { value: string; onSave: (value: string) => void }) => (
@@ -11,14 +11,6 @@ const { createValueButtonMock, calendarMockState } = vi.hoisted(() => ({
         {value}
       </button>
     ),
-  calendarMockState: {
-    props: [] as Array<{
-      captionLayout?: string
-      navLayout?: string
-      startMonth?: Date
-      endMonth?: Date
-    }>,
-  },
 }))
 
 vi.mock('./EditableValue', () => ({
@@ -78,34 +70,6 @@ vi.mock('./IconEditableValue', () => ({
   IconEditableValue: createValueButtonMock('icon-value', (value) => `${value}-icon`),
 }))
 
-vi.mock('@/components/ui/calendar', () => ({
-  Calendar: ({
-    onSelect,
-    captionLayout,
-    navLayout,
-    startMonth,
-    endMonth,
-  }: {
-    onSelect: (value?: Date) => void
-    captionLayout?: string
-    navLayout?: string
-    startMonth?: Date
-    endMonth?: Date
-  }) => {
-    calendarMockState.props.push({ captionLayout, navLayout, startMonth, endMonth })
-    return (
-    <div>
-      <button data-testid="date-picker-calendar" onClick={() => onSelect(new Date(2026, 3, 23))}>
-        pick
-      </button>
-      <button data-testid="date-picker-empty" onClick={() => onSelect(undefined)}>
-        empty
-      </button>
-    </div>
-    )
-  },
-}))
-
 vi.mock('@/components/ui/popover', () => ({
   Popover: ({
     children,
@@ -141,7 +105,6 @@ function makeRect(right: number, bottom: number): DOMRect {
 
 describe('PropertyValueCells extra', () => {
   afterEach(() => {
-    calendarMockState.props.length = 0
     vi.restoreAllMocks()
   })
 
@@ -197,14 +160,14 @@ describe('PropertyValueCells extra', () => {
       />,
     )
 
-    fireEvent.click(screen.getByTestId('date-picker-empty'))
+    fireEvent.change(screen.getByTestId('date-picker-calendar'), { target: { value: '' } })
     fireEvent.click(screen.getByTestId('popover-close'))
 
     expect(onSave).not.toHaveBeenCalled()
     expect(onStartEdit).toHaveBeenCalledWith(null)
   })
 
-  it('saves typed distant dates and enables dropdown calendar navigation', () => {
+  it('saves typed distant dates and constrains the native date picker range', () => {
     const onSave = vi.fn()
 
     render(
@@ -225,12 +188,9 @@ describe('PropertyValueCells extra', () => {
     fireEvent.change(input, { target: { value: '1884-02-29' } })
     fireEvent.keyDown(input, { key: 'Enter' })
 
-    const calendarProps = calendarMockState.props.at(-1)
     expect(onSave).toHaveBeenCalledWith('Due', '1884-02-29')
-    expect(calendarProps?.captionLayout).toBe('dropdown')
-    expect(calendarProps?.navLayout).toBe('after')
-    expect(calendarProps?.startMonth?.getFullYear()).toBe(1800)
-    expect(calendarProps?.endMonth?.getFullYear()).toBe(2200)
+    expect(screen.getByTestId('date-picker-calendar')).toHaveAttribute('min', '1800-01-01')
+    expect(screen.getByTestId('date-picker-calendar')).toHaveAttribute('max', '2200-12-31')
   })
 
   it('rejects invalid typed dates and cancels partial input on escape', () => {

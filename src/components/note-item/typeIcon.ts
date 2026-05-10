@@ -1,16 +1,14 @@
 import type { ComponentType, SVGAttributes } from 'react'
-import {
-  ArrowsClockwise,
-  CalendarBlank,
-  FileText,
-  Flask,
-  StackSimple,
-  Tag,
-  Target,
-  Users,
-  Wrench,
-} from '@phosphor-icons/react'
-import { resolveIcon } from '../../utils/iconRegistry'
+import { ArrowsClockwise } from '@phosphor-icons/react/ArrowsClockwise'
+import { CalendarBlank } from '@phosphor-icons/react/CalendarBlank'
+import { FileText } from '@phosphor-icons/react/FileText'
+import { Flask } from '@phosphor-icons/react/Flask'
+import { StackSimple } from '@phosphor-icons/react/StackSimple'
+import { Tag } from '@phosphor-icons/react/Tag'
+import { Target } from '@phosphor-icons/react/Target'
+import { Users } from '@phosphor-icons/react/Users'
+import { Wrench } from '@phosphor-icons/react/Wrench'
+import { resolveIcon } from '../../utils/iconResolver'
 
 const TYPE_ICON_MAP: Record<string, ComponentType<SVGAttributes<SVGSVGElement>>> = {
   Project: Wrench,

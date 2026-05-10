@@ -1,5 +1,5 @@
 import {
-  type CSSProperties, type Dispatch, type ReactNode, type Ref, type RefObject, type SetStateAction,
+  lazy, Suspense, type CSSProperties, type Dispatch, type ReactNode, type Ref, type RefObject, type SetStateAction,
 } from 'react'
 import type {
   VaultEntry, SidebarSelection, ViewDefinition, ViewFile,
@@ -11,10 +11,14 @@ import {
   SortableContext, useSortable, verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { SlidersHorizontal } from 'lucide-react'
-import {
-  ArrowLeft, ArrowRight, Palette, PencilSimple, Plus, SidebarSimple, Trash,
-} from '@phosphor-icons/react'
+import SlidersHorizontal from 'lucide-react/dist/esm/icons/sliders-horizontal.js'
+import { ArrowLeft } from '@phosphor-icons/react/ArrowLeft'
+import { ArrowRight } from '@phosphor-icons/react/ArrowRight'
+import { Palette } from '@phosphor-icons/react/Palette'
+import { PencilSimple } from '@phosphor-icons/react/PencilSimple'
+import { Plus } from '@phosphor-icons/react/Plus'
+import { SidebarSimple } from '@phosphor-icons/react/SidebarSimple'
+import { Trash } from '@phosphor-icons/react/Trash'
 import { APP_COMMAND_IDS, getAppCommandShortcutDisplay } from '../../hooks/appCommandCatalog'
 import { Button } from '@/components/ui/button'
 import { ActionTooltip } from '@/components/ui/action-tooltip'
@@ -22,7 +26,6 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import {
   type SectionGroup, isSelectionActive, SectionContent, VisibilityPopover,
 } from '../SidebarParts'
-import { TypeCustomizePopover } from '../TypeCustomizePopover'
 import { useDragRegion } from '../../hooks/useDragRegion'
 import { SidebarGroupHeader } from './SidebarGroupHeader'
 import { SidebarViewItem } from './SidebarViewItem'
@@ -40,6 +43,9 @@ const SIDEBAR_TITLE_BAR_ACTION_CLASSNAME =
 const SIDEBAR_COLLAPSE_SHORTCUT = getAppCommandShortcutDisplay(APP_COMMAND_IDS.viewEditorList)
 const HISTORY_BACK_SHORTCUT = getAppCommandShortcutDisplay(APP_COMMAND_IDS.viewGoBack)
 const HISTORY_FORWARD_SHORTCUT = getAppCommandShortcutDisplay(APP_COMMAND_IDS.viewGoForward)
+const TypeCustomizePopover = lazy(() => import('../TypeCustomizePopover').then((module) => ({
+  default: module.TypeCustomizePopover,
+})))
 
 export interface SidebarSectionProps {
   entries: VaultEntry[]
@@ -499,16 +505,18 @@ export function CustomizeOverlay({
 
   return (
     <div ref={innerRef} className="fixed z-50" style={{ left: 20, top: 100 }}>
-      <TypeCustomizePopover
-        currentIcon={typeEntry?.icon ?? null}
-        currentColor={typeEntry?.color ?? null}
-        currentTemplate={typeEntry?.template ?? null}
-        onChangeIcon={(icon) => onCustomize('icon', icon)}
-        onChangeColor={(color) => onCustomize('color', color)}
-        onChangeTemplate={onChangeTemplate}
-        onClose={onClose}
-        locale={locale}
-      />
+      <Suspense fallback={null}>
+        <TypeCustomizePopover
+          currentIcon={typeEntry?.icon ?? null}
+          currentColor={typeEntry?.color ?? null}
+          currentTemplate={typeEntry?.template ?? null}
+          onChangeIcon={(icon) => onCustomize('icon', icon)}
+          onChangeColor={(color) => onCustomize('color', color)}
+          onChangeTemplate={onChangeTemplate}
+          onClose={onClose}
+          locale={locale}
+        />
+      </Suspense>
     </div>
   )
 }

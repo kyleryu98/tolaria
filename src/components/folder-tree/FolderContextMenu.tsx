@@ -1,5 +1,8 @@
 import type { RefObject } from 'react'
-import { ClipboardText, FolderOpen, PencilSimple, Trash } from '@phosphor-icons/react'
+import { ClipboardText } from '@phosphor-icons/react/ClipboardText'
+import { FolderOpen } from '@phosphor-icons/react/FolderOpen'
+import { PencilSimple } from '@phosphor-icons/react/PencilSimple'
+import { Trash } from '@phosphor-icons/react/Trash'
 import { Button } from '@/components/ui/button'
 import { translate, type AppLocale } from '../../lib/i18n'
 

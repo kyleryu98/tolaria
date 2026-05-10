@@ -67,7 +67,7 @@ describe('DynamicPropertiesPanel system metadata', () => {
     vi.clearAllMocks()
   })
 
-  it('keeps the icon visible while hiding the other system metadata', () => {
+  it('keeps the icon visible while hiding the other system metadata', async () => {
     render(
       <DynamicPropertiesPanel
         entry={makeEntry()}
@@ -87,7 +87,7 @@ describe('DynamicPropertiesPanel system metadata', () => {
     expect(screen.getByText('Owner')).toBeInTheDocument()
     expect(screen.getByText('Luca')).toBeInTheDocument()
     expect(screen.getByText('Icon')).toBeInTheDocument()
-    expect(screen.getByTestId('icon-editable-display')).toHaveTextContent('rocket')
+    expect(await screen.findByTestId('icon-editable-display')).toHaveTextContent('rocket')
     expect(screen.queryByDisplayValue('legacy')).not.toBeInTheDocument()
     expect(screen.queryByText('Order')).not.toBeInTheDocument()
     expect(screen.queryByText('Sort')).not.toBeInTheDocument()
@@ -133,7 +133,7 @@ describe('DynamicPropertiesPanel system metadata', () => {
     expect(onAddProperty).toHaveBeenCalledWith('_icon', 'rocket')
   })
 
-  it('renders an existing underscored icon property with the icon picker UI', () => {
+  it('renders an existing underscored icon property with the icon picker UI', async () => {
     render(
       <DynamicPropertiesPanel
         entry={makeEntry()}
@@ -144,6 +144,6 @@ describe('DynamicPropertiesPanel system metadata', () => {
     )
 
     expect(screen.getByText('Icon')).toBeInTheDocument()
-    expect(screen.getByTestId('icon-editable-display')).toHaveTextContent('megaphone')
+    expect(await screen.findByTestId('icon-editable-display')).toHaveTextContent('megaphone')
   })
 })

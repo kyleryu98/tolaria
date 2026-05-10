@@ -188,9 +188,9 @@ pub fn migrate_views(vault_path: &Path) {
         let dst = new_dir.join(entry.file_name());
         if !dst.exists() {
             if let Err(e) = fs::rename(&src, &dst) {
-                log::warn!("Failed to migrate view {:?}: {}", src, e);
+                log::warn!("Failed to migrate view {src:?}: {e}");
             } else {
-                log::info!("Migrated view {:?} → {:?}", src, dst);
+                log::info!("Migrated view {src:?} → {dst:?}");
             }
         }
     }
@@ -218,14 +218,14 @@ fn read_view_file(path: &Path) -> Option<ViewFile> {
     let content = match fs::read_to_string(path) {
         Ok(content) => content,
         Err(error) => {
-            log::warn!("Failed to read view file {}: {}", filename, error);
+            log::warn!("Failed to read view file {filename}: {error}");
             return None;
         }
     };
     let definition = match serde_yaml::from_str::<ViewDefinition>(&content) {
         Ok(definition) => definition,
         Err(error) => {
-            log::warn!("Failed to parse view {}: {}", filename, error);
+            log::warn!("Failed to parse view {filename}: {error}");
             return None;
         }
     };
@@ -247,7 +247,7 @@ pub fn scan_views(vault_path: &Path) -> Vec<ViewFile> {
     let entries = match fs::read_dir(&views_dir) {
         Ok(e) => e,
         Err(e) => {
-            log::warn!("Failed to read views directory: {}", e);
+            log::warn!("Failed to read views directory: {e}");
             return Vec::new();
         }
     };
@@ -281,12 +281,10 @@ pub fn save_view(
         return Err("Filename must end with .yml".to_string());
     }
     let views_dir = vault_path.join("views");
-    fs::create_dir_all(&views_dir)
-        .map_err(|e| format!("Failed to create views directory: {}", e))?;
-    let yaml = serde_yaml::to_string(definition)
-        .map_err(|e| format!("Failed to serialize view: {}", e))?;
-    fs::write(views_dir.join(filename), yaml)
-        .map_err(|e| format!("Failed to write view file: {}", e))
+    fs::create_dir_all(&views_dir).map_err(|e| format!("Failed to create views directory: {e}"))?;
+    let yaml =
+        serde_yaml::to_string(definition).map_err(|e| format!("Failed to serialize view: {e}"))?;
+    fs::write(views_dir.join(filename), yaml).map_err(|e| format!("Failed to write view file: {e}"))
 }
 
 /// Delete a view file at `vault_path/views/{filename}`.
@@ -295,7 +293,7 @@ pub fn delete_view(vault_path: &Path, filename: &str) -> Result<(), String> {
     match fs::remove_file(&path) {
         Ok(()) => Ok(()),
         Err(error) if error.kind() == ErrorKind::NotFound => Ok(()),
-        Err(error) => Err(format!("Failed to delete view: {}", error)),
+        Err(error) => Err(format!("Failed to delete view: {error}")),
     }
 }
 

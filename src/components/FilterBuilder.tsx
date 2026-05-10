@@ -1,4 +1,6 @@
-import { Plus, X, WarningCircle } from '@phosphor-icons/react'
+import { Plus } from '@phosphor-icons/react/Plus'
+import { X } from '@phosphor-icons/react/X'
+import { WarningCircle } from '@phosphor-icons/react/WarningCircle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'

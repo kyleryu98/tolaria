@@ -5,7 +5,6 @@ import {
   defaultInlineContentSpecs,
 } from '@blocknote/core'
 import { createReactBlockSpec, createReactInlineContentSpec } from '@blocknote/react'
-import { lazy, Suspense } from 'react'
 import { resolveWikilinkColor as resolveColor } from '../utils/wikilinkColors'
 import { resolveEntry } from '../utils/wikilink'
 import { MATH_BLOCK_TYPE, MATH_INLINE_TYPE, renderMathToHtml } from '../utils/mathMarkdown'
@@ -14,13 +13,7 @@ import { TLDRAW_BLOCK_TYPE, TLDRAW_DEFAULT_HEIGHT } from '../utils/tldrawMarkdow
 import type { VaultEntry } from '../types'
 import { createTolariaCodeBlockOptions } from './codeBlockOptions'
 import { NoteTitleIcon } from './NoteTitleIcon'
-import { MermaidDiagram } from './MermaidDiagram'
 import { SafeHtmlSpan } from './SafeMarkup'
-import { updateTldrawBlockPropsSafely } from './tldrawBlockProps'
-
-const TldrawWhiteboard = lazy(() => import('./TldrawWhiteboard').then(module => ({
-  default: module.TldrawWhiteboard,
-})))
 
 // Module-level cache so the WikiLink renderer (defined outside React) can access entries
 export const _wikilinkEntriesRef: { current: VaultEntry[] } = { current: [] }
@@ -157,13 +150,27 @@ const MermaidBlock = createReactBlockSpec(
     runsBefore: ['codeBlock'],
     parse: readMermaidPreElement,
     render: (props) => (
-      <MermaidDiagram
-        diagram={props.block.props.diagram}
-        source={props.block.props.source}
-      />
+      <pre
+        className="mermaid-diagram mermaid-diagram--loading"
+        data-source={props.block.props.source}
+      >
+        {props.block.props.diagram}
+      </pre>
     ),
   },
 )
+
+function TldrawPlaceholder({ height, width }: { height: string | number; width: string }) {
+  return (
+    <div
+      className="tldraw-whiteboard tldraw-whiteboard--loading"
+      style={{
+        minHeight: typeof height === 'number' ? `${height}px` : height,
+        width: width || '100%',
+      }}
+    />
+  )
+}
 
 const TldrawBlock = createReactBlockSpec(
   {
@@ -180,35 +187,10 @@ const TldrawBlock = createReactBlockSpec(
     runsBefore: ['codeBlock'],
     meta: { selectable: false },
     render: (props) => (
-      <Suspense fallback={<div className="tldraw-whiteboard tldraw-whiteboard--loading" />}>
-        <TldrawWhiteboard
-          boardId={props.block.props.boardId}
-          height={props.block.props.height}
-          snapshot={props.block.props.snapshot}
-          width={props.block.props.width}
-          onSnapshotChange={(snapshot) => {
-            updateTldrawBlockPropsSafely({
-              blockId: props.block.id,
-              editor: props.editor,
-              nextProps: (currentProps) => ({
-                ...currentProps,
-                snapshot,
-              }),
-            })
-          }}
-          onSizeChange={(size) => {
-            updateTldrawBlockPropsSafely({
-              blockId: props.block.id,
-              editor: props.editor,
-              nextProps: (currentProps) => ({
-                ...currentProps,
-                height: size.height,
-                width: size.width,
-              }),
-            })
-          }}
-        />
-      </Suspense>
+      <TldrawPlaceholder
+        height={props.block.props.height}
+        width={props.block.props.width}
+      />
     ),
   },
 )

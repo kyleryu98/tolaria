@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { AlertTriangle, FileText, Check, Loader2 } from 'lucide-react'
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.js'
+import FileText from 'lucide-react/dist/esm/icons/file-text.js'
+import Check from 'lucide-react/dist/esm/icons/check.js'
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2.js'
 import type { ConflictFileState } from '../hooks/useConflictResolver'
 import { cn } from '@/lib/utils'
 

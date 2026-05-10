@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
-import { MagnifyingGlass } from '@phosphor-icons/react'
+import { MagnifyingGlass } from '@phosphor-icons/react/MagnifyingGlass'
 import { ICON_OPTIONS, type IconEntry } from '../utils/iconRegistry'
 import { ACCENT_COLORS } from '../utils/typeColors'
 import { cn } from '@/lib/utils'

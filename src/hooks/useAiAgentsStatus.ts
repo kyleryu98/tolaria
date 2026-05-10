@@ -8,6 +8,7 @@ import {
   type AiAgentId,
   type AiAgentsStatus,
 } from '../lib/aiAgents'
+import { scheduleStartupIntegrationCheck } from './startupDefer'
 
 type RawAiAgentsStatus = Partial<Record<AiAgentId, { installed?: boolean | null; version?: string | null }>>
 
@@ -21,19 +22,24 @@ export function useAiAgentsStatus(): AiAgentsStatus {
   useEffect(() => {
     let cancelled = false
 
-    tauriCall<RawAiAgentsStatus>('get_ai_agents_status')
-      .then((result) => {
-        if (!cancelled) {
-          setStatuses(normalizeAiAgentsStatus(result))
-        }
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setStatuses(createMissingAiAgentsStatus())
-        }
-      })
+    const cancelScheduledCheck = scheduleStartupIntegrationCheck(() => {
+      tauriCall<RawAiAgentsStatus>('get_ai_agents_status')
+        .then((result) => {
+          if (!cancelled) {
+            setStatuses(normalizeAiAgentsStatus(result))
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setStatuses(createMissingAiAgentsStatus())
+          }
+        })
+    })
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+      cancelScheduledCheck()
+    }
   }, [])
 
   return statuses

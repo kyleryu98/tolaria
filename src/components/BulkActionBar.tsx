@@ -1,5 +1,9 @@
 import { memo } from 'react'
-import { Archive, ArrowCounterClockwise, CheckCircle, Trash, X } from '@phosphor-icons/react'
+import { Archive } from '@phosphor-icons/react/Archive'
+import { ArrowCounterClockwise } from '@phosphor-icons/react/ArrowCounterClockwise'
+import { CheckCircle } from '@phosphor-icons/react/CheckCircle'
+import { Trash } from '@phosphor-icons/react/Trash'
+import { X } from '@phosphor-icons/react/X'
 import { Button } from '@/components/ui/button'
 
 interface BulkActionBarProps {

@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { act, renderHook } from '@testing-library/react'
 import { useAiAgentsStatus } from './useAiAgentsStatus'
+import { STARTUP_INTEGRATION_CHECK_DELAY_MS } from './startupDefer'
 
 vi.mock('@tauri-apps/api/core', () => ({
   invoke: vi.fn(),
@@ -15,8 +16,20 @@ const { mockInvoke } = await import('../mock-tauri') as { mockInvoke: ReturnType
 
 describe('useAiAgentsStatus', () => {
   beforeEach(() => {
+    vi.useFakeTimers()
     vi.clearAllMocks()
   })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  async function advanceStartupCheck() {
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(STARTUP_INTEGRATION_CHECK_DELAY_MS + 1)
+    })
+    await act(async () => {})
+  }
 
   it('starts in checking state and resolves agent statuses', async () => {
     mockInvoke.mockImplementation((command: string) => {
@@ -39,14 +52,15 @@ describe('useAiAgentsStatus', () => {
     expect(result.current.opencode.status).toBe('checking')
     expect(result.current.pi.status).toBe('checking')
     expect(result.current.gemini.status).toBe('checking')
+    expect(mockInvoke).not.toHaveBeenCalled()
 
-    await waitFor(() => {
-      expect(result.current.claude_code).toEqual({ status: 'installed', version: '1.0.20' })
-      expect(result.current.codex).toEqual({ status: 'missing', version: null })
-      expect(result.current.opencode).toEqual({ status: 'installed', version: '0.3.1' })
-      expect(result.current.pi).toEqual({ status: 'installed', version: '0.70.2' })
-      expect(result.current.gemini).toEqual({ status: 'installed', version: '0.5.1' })
-    })
+    await advanceStartupCheck()
+
+    expect(result.current.claude_code).toEqual({ status: 'installed', version: '1.0.20' })
+    expect(result.current.codex).toEqual({ status: 'missing', version: null })
+    expect(result.current.opencode).toEqual({ status: 'installed', version: '0.3.1' })
+    expect(result.current.pi).toEqual({ status: 'installed', version: '0.70.2' })
+    expect(result.current.gemini).toEqual({ status: 'installed', version: '0.5.1' })
   })
 
   it('falls back to missing when the status call fails', async () => {
@@ -54,12 +68,12 @@ describe('useAiAgentsStatus', () => {
 
     const { result } = renderHook(() => useAiAgentsStatus())
 
-    await waitFor(() => {
-      expect(result.current.claude_code.status).toBe('missing')
-      expect(result.current.codex.status).toBe('missing')
-      expect(result.current.opencode.status).toBe('missing')
-      expect(result.current.pi.status).toBe('missing')
-      expect(result.current.gemini.status).toBe('missing')
-    })
+    await advanceStartupCheck()
+
+    expect(result.current.claude_code.status).toBe('missing')
+    expect(result.current.codex.status).toBe('missing')
+    expect(result.current.opencode.status).toBe('missing')
+    expect(result.current.pi.status).toBe('missing')
+    expect(result.current.gemini.status).toBe('missing')
   })
 })

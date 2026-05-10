@@ -1,4 +1,4 @@
-import { Sparkle } from '@phosphor-icons/react'
+import { Sparkle } from '@phosphor-icons/react/Sparkle'
 import type { VaultEntry } from '../types'
 import type { NoteReference } from '../utils/ai-context'
 import { InlineWikilinkInput } from './InlineWikilinkInput'

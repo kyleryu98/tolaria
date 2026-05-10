@@ -896,6 +896,17 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // BlockNote uses Shiki for code highlighting here. Avoid transforming
+      // lowlight's all-language Highlight.js export during production builds.
+      lowlight: path.resolve(__dirname, './src/vendor/lowlight-lite.ts'),
+      // Local fork builds do not ship third-party crash reporting. Keep the
+      // React root error hook contract without loading the full Sentry SDK.
+      '@sentry/react': path.resolve(__dirname, './src/vendor/sentry-react-lite.ts'),
+      // This fork does not enable BlockNote collaborative editing. The upstream
+      // barrels import Yjs eagerly, so keep those unused paths out of local app
+      // builds.
+      'y-prosemirror': path.resolve(__dirname, './src/vendor/y-prosemirror-lite.ts'),
+      yjs: path.resolve(__dirname, './src/vendor/yjs-lite.ts'),
     },
   },
 
@@ -927,10 +938,19 @@ export default defineConfig({
   build: {
     // Tauri uses Chromium on Windows and WebKit on macOS/Linux
     target: process.env.TAURI_PLATFORM === 'windows' ? 'chrome105' : 'safari13',
-    // Don't minify for debug builds
-    minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
+    // Local fork builds favor predictable packaging over smaller bundles.
+    // Minification is opt-in because this editor graph can spike memory during
+    // Rollup's chunk rendering phase on development machines.
+    minify: process.env.TOLARIA_ENABLE_MINIFY === '1' ? 'esbuild' : false,
+    reportCompressedSize: false,
     // Produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
+    rollupOptions: {
+      // The editor bundle pulls in large Tldraw, Mermaid, icon, and syntax
+      // highlighting graphs. Keep Rollup from fanning out too many reads at
+      // once so local Tauri release builds stay below common memory ceilings.
+      maxParallelFileOps: 1,
+    },
   },
 
   test: {

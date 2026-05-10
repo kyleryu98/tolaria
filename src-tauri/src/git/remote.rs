@@ -21,7 +21,7 @@ pub fn has_remote(vault_path: &str) -> Result<bool, String> {
         .args(["remote"])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git remote: {}", e))?;
+        .map_err(|e| format!("Failed to run git remote: {e}"))?;
 
     Ok(!String::from_utf8_lossy(&output.stdout).trim().is_empty())
 }
@@ -44,7 +44,7 @@ pub fn git_pull(vault_path: &str) -> Result<GitPullResult, String> {
         .args(["pull", "--no-rebase"])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git pull: {}", e))?;
+        .map_err(|e| format!("Failed to run git pull: {e}"))?;
 
     let stdout = String::from_utf8_lossy(&output.stdout).to_string();
     let stderr = String::from_utf8_lossy(&output.stderr).to_string();
@@ -145,7 +145,7 @@ pub fn git_remote_status(vault_path: &str) -> Result<GitRemoteStatus, String> {
         .args(["rev-list", "--left-right", "--count", "HEAD...@{upstream}"])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git rev-list: {}", e))?;
+        .map_err(|e| format!("Failed to run git rev-list: {e}"))?;
 
     if !output.status.success() {
         // No upstream set — report 0/0
@@ -175,7 +175,7 @@ fn current_branch(vault: &Path) -> Result<String, String> {
         .args(["branch", "--show-current"])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to get branch: {}", e))?;
+        .map_err(|e| format!("Failed to get branch: {e}"))?;
     Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
 }
 
@@ -287,7 +287,7 @@ pub fn git_push(vault_path: &str) -> Result<GitPushResult, String> {
         .args(["push"])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git push: {}", e))?;
+        .map_err(|e| format!("Failed to run git push: {e}"))?;
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);

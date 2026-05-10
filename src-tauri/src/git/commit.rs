@@ -15,11 +15,11 @@ pub fn git_commit(vault_path: &str, message: &str) -> Result<String, String> {
         .args(["add", "-A"])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git add: {}", e))?;
+        .map_err(|e| format!("Failed to run git add: {e}"))?;
 
     if !add.status.success() {
         let stderr = String::from_utf8_lossy(&add.stderr);
-        return Err(format!("git add failed: {}", stderr));
+        return Err(format!("git add failed: {stderr}"));
     }
 
     match run_commit(vault, message, false) {
@@ -48,7 +48,7 @@ fn run_commit(vault: &Path, message: &str, disable_signing: bool) -> Result<Stri
         .output()
         .map_err(|e| CommitFailure {
             stdout: String::new(),
-            stderr: format!("Failed to run git commit: {}", e),
+            stderr: format!("Failed to run git commit: {e}"),
         })?;
 
     if commit.status.success() {

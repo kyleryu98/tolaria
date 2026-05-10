@@ -1,5 +1,5 @@
 import { createElement, useMemo, useState, type ComponentType, type MouseEvent, type ReactNode, type SVGAttributes } from 'react'
-import { Link } from '@phosphor-icons/react'
+import { Link } from '@phosphor-icons/react/Link'
 import { cn } from '@/lib/utils'
 import type { VaultEntry } from '../../types'
 import { resolveNoteIcon } from '../../utils/noteIcon'

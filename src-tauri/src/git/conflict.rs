@@ -13,7 +13,7 @@ pub fn get_conflict_files(vault_path: &str) -> Result<Vec<String>, String> {
         .args(["ls-files", "--unmerged"])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to check conflicts: {}", e))?;
+        .map_err(|e| format!("Failed to check conflicts: {e}"))?;
 
     let stdout = String::from_utf8_lossy(&output.stdout);
     // Each unmerged file appears multiple times (once per stage: base/ours/theirs).
@@ -37,8 +37,7 @@ pub fn git_resolve_conflict(vault_path: &str, file: &str, strategy: &str) -> Res
         "theirs" => "--theirs",
         _ => {
             return Err(format!(
-                "Invalid strategy '{}': must be 'ours' or 'theirs'",
-                strategy
+                "Invalid strategy '{strategy}': must be 'ours' or 'theirs'"
             ))
         }
     };
@@ -97,12 +96,12 @@ pub fn git_commit_conflict_resolution(vault_path: &str) -> Result<String, String
             .env("GIT_EDITOR", "true")
             .current_dir(vault)
             .output()
-            .map_err(|e| format!("Failed to run git rebase --continue: {}", e))?,
+            .map_err(|e| format!("Failed to run git rebase --continue: {e}"))?,
         _ => git_command()
             .args(["commit", "-m", "Resolve merge conflicts"])
             .current_dir(vault)
             .output()
-            .map_err(|e| format!("Failed to run git commit: {}", e))?,
+            .map_err(|e| format!("Failed to run git commit: {e}"))?,
     };
 
     if !output.status.success() {
@@ -335,8 +334,7 @@ mod tests {
         let conflicts = get_conflict_files(vp_b).unwrap();
         assert!(
             conflicts.contains(&"conflict.md".to_string()),
-            "Should detect conflict.md during rebase, got: {:?}",
-            conflicts
+            "Should detect conflict.md during rebase, got: {conflicts:?}"
         );
     }
 
@@ -352,7 +350,7 @@ mod tests {
         assert!(remaining.is_empty());
 
         let result = git_commit_conflict_resolution(vp_b);
-        assert!(result.is_ok(), "rebase --continue failed: {:?}", result);
+        assert!(result.is_ok(), "rebase --continue failed: {result:?}");
 
         assert_eq!(get_conflict_mode(vp_b), "none");
     }

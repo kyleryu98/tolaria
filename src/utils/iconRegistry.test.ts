@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { resolveIcon, ICON_OPTIONS } from './iconRegistry'
-import { FileText, GearSix, CookingPot } from '@phosphor-icons/react'
+import { FileText } from '@phosphor-icons/react/FileText'
+import { GearSix } from '@phosphor-icons/react/GearSix'
+import { CookingPot } from '@phosphor-icons/react/CookingPot'
 
 describe('resolveIcon', () => {
   it('returns FileText for null', () => {

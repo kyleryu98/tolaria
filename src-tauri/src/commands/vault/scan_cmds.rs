@@ -107,7 +107,7 @@ pub async fn search_vault(
     let limit = limit.unwrap_or(20);
     tokio::task::spawn_blocking(move || search::search_vault(&vault_path, &query, &mode, limit))
         .await
-        .map_err(|e| format!("Search task failed: {}", e))?
+        .map_err(|e| format!("Search task failed: {e}"))?
 }
 
 #[cfg(test)]

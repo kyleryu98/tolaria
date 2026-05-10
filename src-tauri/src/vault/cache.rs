@@ -171,7 +171,7 @@ fn collect_paths_from_porcelain(stdout: &str) -> Vec<String> {
 }
 
 fn git_changed_files(vault: &Path, from_hash: &str, to_hash: &str) -> Vec<String> {
-    let diff_arg = format!("{}..{}", from_hash, to_hash);
+    let diff_arg = format!("{from_hash}..{to_hash}");
     let mut files = run_git(vault, &["diff", &diff_arg, "--name-only"])
         .map(|s| collect_paths_from_diff(&s))
         .unwrap_or_default();

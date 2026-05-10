@@ -1,14 +1,13 @@
 import {
-  type ReactNode, type RefObject,
+  lazy, Suspense, type ReactNode, type RefObject,
 } from 'react'
-import {
-  Palette, PencilSimple, Trash,
-} from '@phosphor-icons/react'
+import { Palette } from '@phosphor-icons/react/Palette'
+import { PencilSimple } from '@phosphor-icons/react/PencilSimple'
+import { Trash } from '@phosphor-icons/react/Trash'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { ViewDefinition, ViewFile } from '../../types'
 import { translate, type AppLocale } from '../../lib/i18n'
-import { TypeCustomizePopover } from '../TypeCustomizePopover'
 import { useSidebarInlineRenameInput } from './sidebarHooks'
 
 export interface MenuPosition {
@@ -17,6 +16,9 @@ export interface MenuPosition {
 }
 
 export type ViewDefinitionPatchHandler = (filename: string, patch: Partial<ViewDefinition>) => void
+const TypeCustomizePopover = lazy(() => import('../TypeCustomizePopover').then((module) => ({
+  default: module.TypeCustomizePopover,
+})))
 
 export function ViewRenameInput({
   initialValue,
@@ -142,17 +144,19 @@ export function ViewCustomizePanel({
 
   return (
     <div ref={innerRef} className="fixed z-50" style={{ left: pos.x, top: pos.y }}>
-      <TypeCustomizePopover
-        currentIcon={view.definition.icon}
-        currentColor={view.definition.color}
-        currentTemplate={null}
-        onChangeIcon={(icon) => onUpdateViewDefinition(view.filename, { icon })}
-        onChangeColor={(color) => onUpdateViewDefinition(view.filename, { color })}
-        onChangeTemplate={() => {}}
-        onClose={onClose}
-        showTemplate={false}
-        locale={locale}
-      />
+      <Suspense fallback={null}>
+        <TypeCustomizePopover
+          currentIcon={view.definition.icon}
+          currentColor={view.definition.color}
+          currentTemplate={null}
+          onChangeIcon={(icon) => onUpdateViewDefinition(view.filename, { icon })}
+          onChangeColor={(color) => onUpdateViewDefinition(view.filename, { color })}
+          onChangeTemplate={() => {}}
+          onClose={onClose}
+          showTemplate={false}
+          locale={locale}
+        />
+      </Suspense>
     </div>
   )
 }

@@ -162,8 +162,8 @@ fn sanitize_array_item(item: &serde_json::Value) -> Option<serde_json::Value> {
             let parts: Vec<String> = map
                 .iter()
                 .map(|(k, v)| match v {
-                    serde_json::Value::String(s) => format!("{}: {}", k, s),
-                    _ => format!("{}: {}", k, v),
+                    serde_json::Value::String(s) => format!("{k}: {s}"),
+                    _ => format!("{k}: {v}"),
                 })
                 .collect();
             Some(serde_json::Value::String(parts.join(", ")))

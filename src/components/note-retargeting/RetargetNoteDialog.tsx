@@ -1,4 +1,5 @@
-import { Check, StackSimple } from '@phosphor-icons/react'
+import { Check } from '@phosphor-icons/react/Check'
+import { StackSimple } from '@phosphor-icons/react/StackSimple'
 import { useMemo, useState, type KeyboardEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import {

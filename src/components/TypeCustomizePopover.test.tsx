@@ -24,8 +24,9 @@ describe('resolveIcon', () => {
 })
 
 describe('ICON_OPTIONS', () => {
-  it('contains 200+ icons', () => {
-    expect(ICON_OPTIONS.length).toBeGreaterThanOrEqual(200)
+  it('contains a startup-safe curated icon set', () => {
+    expect(ICON_OPTIONS.length).toBeGreaterThanOrEqual(40)
+    expect(ICON_OPTIONS.length).toBeLessThan(80)
   })
 
   it('has unique names', () => {

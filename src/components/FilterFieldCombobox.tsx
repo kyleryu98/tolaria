@@ -1,4 +1,4 @@
-import { CaretUpDown } from '@phosphor-icons/react'
+import { CaretUpDown } from '@phosphor-icons/react/CaretUpDown'
 import { useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type FocusEvent, type KeyboardEvent, type RefObject } from 'react'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverAnchor, PopoverContent } from '@/components/ui/popover'

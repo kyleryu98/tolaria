@@ -625,6 +625,7 @@ interface ImmediateCreateDeps {
 
 interface ImmediateCreateRequest {
   type?: string
+  folderPath?: string
 }
 
 interface ImmediateCreateQueueConfig {
@@ -658,6 +659,27 @@ function generateUntitledFilename(entries: VaultEntry[], type: string, pendingSl
   return candidate
 }
 
+function normalizeCreationFolderPath(folderPath?: string): string | null {
+  if (!folderPath) return null
+  const parts = folderPath
+    .replace(/\\/g, '/')
+    .split('/')
+    .map((part) => part.trim())
+    .filter(Boolean)
+
+  if (parts.length === 0 || parts.some((part) => part === '.' || part === '..')) {
+    return null
+  }
+
+  return parts.join('/')
+}
+
+function createImmediateNotePath(vaultPath: string, slug: string, folderPath?: string): string {
+  const normalizedFolderPath = normalizeCreationFolderPath(folderPath)
+  const relativePath = normalizedFolderPath ? `${normalizedFolderPath}/${slug}.md` : `${slug}.md`
+  return joinVaultPath(vaultPath, relativePath)
+}
+
 async function persistImmediateEntry(
   deps: ImmediateCreateDeps,
   entry: VaultEntry,
@@ -677,8 +699,11 @@ async function persistImmediateEntry(
 }
 
 /** Create an untitled note and write its backing file before opening it. */
-async function createNoteImmediate(deps: ImmediateCreateDeps, type?: string): Promise<boolean> {
-  const noteType = type || 'Note'
+async function createNoteImmediate(
+  deps: ImmediateCreateDeps,
+  request: ImmediateCreateRequest,
+): Promise<boolean> {
+  const noteType = request.type || 'Note'
   const slug = generateUntitledFilename(deps.entries, noteType, deps.pendingSlugs)
   const title = slug_to_title(slug)
   const template = resolveTemplate({ entries: deps.entries, typeName: noteType })
@@ -686,7 +711,13 @@ async function createNoteImmediate(deps: ImmediateCreateDeps, type?: string): Pr
   const status = null
   const creationVaultPath = resolveCreationVaultPath(deps.vaultPath, deps.defaultWorkspacePath, deps.vaults)
   const entry = {
-    ...buildNewEntry({ path: joinVaultPath(creationVaultPath, `${slug}.md`), slug, title, type: noteType, status }),
+    ...buildNewEntry({
+      path: createImmediateNotePath(creationVaultPath, slug, request.folderPath),
+      slug,
+      title,
+      type: noteType,
+      status,
+    }),
     workspace: workspaceForVaultPath(creationVaultPath, deps.vaults, deps.defaultWorkspacePath),
   }
   const resolved = applyTypeDefaults({
@@ -708,7 +739,8 @@ function trackImmediateCreate(request: ImmediateCreateRequest, didCreate: boolea
   if (!didCreate) return
   trackEvent('note_created', {
     has_type: request.type ? 1 : 0,
-    creation_path: request.type ? 'type_section' : 'cmd_n',
+    creation_path: request.folderPath ? 'folder' : request.type ? 'type_section' : 'cmd_n',
+    folder_scoped: request.folderPath ? 1 : 0,
   })
 }
 
@@ -764,7 +796,7 @@ function useLatestImmediateCreateDeps(
   return { latestDepsRef, syncDeps }
 }
 
-function useImmediateCreateQueue(config: ImmediateCreateQueueConfig): (type?: string) => void {
+function useImmediateCreateQueue(config: ImmediateCreateQueueConfig): (type?: string, folderPath?: string) => void {
   const pendingSlugsRef = useRef<Set<string>>(new Set())
   const queuedImmediateCreatesRef = useRef<ImmediateCreateRequest[]>([])
   const immediateCreateLockedRef = useRef(false)
@@ -777,7 +809,7 @@ function useImmediateCreateQueue(config: ImmediateCreateQueueConfig): (type?: st
     if (!deps) return
 
     try {
-      const didCreate = await createNoteImmediate(deps, request.type)
+      const didCreate = await createNoteImmediate(deps, request)
       trackImmediateCreate(request, didCreate)
     } catch (error) {
       console.warn('Failed to create immediate note:', error)
@@ -811,9 +843,9 @@ function useImmediateCreateQueue(config: ImmediateCreateQueueConfig): (type?: st
     }
   }, [])
 
-  return useCallback((type?: string) => {
+  return useCallback((type?: string, folderPath?: string) => {
     syncDeps()
-    const request = { type }
+    const request = { type, folderPath }
     if (immediateCreateLockedRef.current) {
       queuedImmediateCreatesRef.current.push(request)
       return

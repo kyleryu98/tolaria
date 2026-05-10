@@ -201,7 +201,7 @@ The editor Table of Contents is derived from the live BlockNote document, not fr
 
 Entity type is stored in the `type:` frontmatter field (e.g. `type: Quarter`). The legacy field name `Is A:` is still accepted as an alias for backwards compatibility but new notes use `type:`. The `VaultEntry.isA` property in TypeScript/Rust holds the resolved value.
 
-Type is determined **purely** from the `type:` frontmatter field — it is never inferred from the file's folder location. All notes live at the vault root as flat `.md` files:
+Type is determined **purely** from the `type:` frontmatter field — it is never inferred from the file's folder location. By default, general note creation writes flat `.md` files at the selected default workspace root:
 
 ```
 ~/Laputa/
@@ -217,7 +217,7 @@ Type is determined **purely** from the `type:` frontmatter field — it is never
 ├── ...
 ```
 
-New notes are created at the vault root: `{vault}/{slug}.md`. Changing a note's type only requires updating the `type:` field in frontmatter — the file does not move. Moving a note into a user folder is a separate filesystem concern: the folder path changes, but the note keeps the same filename and `type:` value. Legacy `type/` and `types/` folders are still scanned like other non-hidden vault folders, so existing type documents in those folders continue to work, but new type documents created by Tolaria are written at the vault root. Legacy `config/` content is still recognized during migration and repair, but Tolaria's managed AI guidance now lives at the vault root.
+Immediate note creation from a folder-scoped note list is the exception: the created backing file is written under that selected relative folder (`{vault}/{folder}/{slug}.md`) so the note appears in the current list after refresh. Changing a note's type only requires updating the `type:` field in frontmatter — the file does not move. Moving a note into a user folder is a separate filesystem concern: the folder path changes, but the note keeps the same filename and `type:` value. Legacy `type/` and `types/` folders are still scanned like other non-hidden vault folders, so existing type documents in those folders continue to work, but new type documents created by Tolaria are written at the vault root. Legacy `config/` content is still recognized during migration and repair, but Tolaria's managed AI guidance now lives at the vault root.
 
 A `flatten_vault` migration command is available to move existing notes from type-based subfolders to the vault root.
 
@@ -243,6 +243,8 @@ Each entity type can have a corresponding **type document**: any markdown note w
 | `sort` | string | Default sort: "modified:desc", "title:asc", "property:Priority:asc"; bare custom-property form such as "Priority:asc" is accepted and normalized in the UI |
 | `view` | string | Default view mode: "all", "editor-list", "editor-only" |
 | `visible` | bool | Whether type appears in sidebar (default: true) |
+
+Common note/type icon display paths resolve through `src/utils/iconResolver.ts`, which uses deep Phosphor imports for a small set of frequently rendered icons. The appearance picker uses the curated startup-safe `src/utils/iconRegistry.ts` list so opening Tolaria does not import the full Phosphor catalog.
 
 **Type relationship**: When any entry has an `isA` value (e.g., "Project"), the Rust backend automatically adds a `"Type"` entry to its `relationships` map pointing to `[[project]]`. This makes the type navigable from the Inspector panel while keeping location as an implementation detail.
 
@@ -562,10 +564,11 @@ const WikiLink = createReactInlineContentSpec(
 
 ### Code Block Highlighting
 
-Defined in `src/components/editorSchema.tsx` and styled in `src/components/EditorTheme.css`:
+Defined in `src/components/editorSchema.tsx`, `src/components/codeBlockOptions.ts`, and styled in `src/components/EditorTheme.css`:
 
 - The schema overrides BlockNote's default `codeBlock` spec with `createCodeBlockSpec({ ...codeBlockOptions, defaultLanguage: "text" })` from `@blocknote/code-block`.
-- Fenced code blocks now use BlockNote's supported Shiki-backed highlighter path, which renders `.shiki` token spans directly inside the editor DOM.
+- Fenced code blocks use BlockNote's supported Shiki-backed highlighter path, which renders `.shiki` token spans directly inside the editor DOM.
+- Local fork builds import only Tolaria's common language set from Shiki (`text`, JavaScript/TypeScript/JSX/TSX, JSON, Markdown, shell, CSS, HTML, YAML, SQL, Python, Rust, and Mermaid) instead of the full bundled grammar catalog.
 - Tolaria keeps `defaultLanguage: "text"` so unlabeled code blocks do not silently become JavaScript at creation time. Parsed unlabeled code blocks then run through Tolaria's lightweight language inference, while explicit fence languages and user dropdown choices still win.
 - Inline-code chip styling remains scoped to `.bn-inline-content code`, so fenced `pre > code` nodes keep the dedicated code-block shell instead of inheriting the muted inline surface.
 
@@ -584,7 +587,7 @@ Defined in `src/utils/durableMarkdownBlocks.ts`, `src/utils/editorDurableMarkdow
 
 - Fenced `mermaid` blocks become `mermaidBlock` schema nodes before BlockNote sees the Markdown body.
 - Each `mermaidBlock` stores the original fenced Markdown plus the diagram body, so raw-mode entry and saves can restore the canonical source instead of serializing generated SVG.
-- The rich editor renders diagrams with the `mermaid` package and uses the original source as an inline fallback when rendering fails.
+- In this local fork, the main editor renders Mermaid blocks as source-backed placeholders by default so startup and production builds do not eagerly load the live `mermaid` runtime. `MermaidDiagram` remains available for explicit/lazy use and keeps its renderer tests.
 - `serializeDurableEditorBlocks()` wraps the math-aware serializer so math, wikilinks, Mermaid diagrams, and whiteboards share the same Markdown-first save path.
 - The `/mermaid` slash command inserts a placeholder rectangle diagram using the same schema-backed Markdown storage path, avoiding an invalid empty diagram state.
 
@@ -594,7 +597,7 @@ Defined in `src/utils/durableMarkdownBlocks.ts`, `src/utils/editorDurableMarkdow
 
 - Fenced `tldraw` blocks become `tldrawBlock` schema nodes before BlockNote sees the Markdown body.
 - Each `tldrawBlock` stores a stable `boardId` plus the tldraw document snapshot JSON. Session state such as camera, selected tool, and current selection is not persisted into the note.
-- The rich editor renders the block with the `tldraw` package and saves debounced document snapshot changes back into the block props, so normal Tolaria autosave writes the board into the `.md` file.
+- In this local fork, the main editor renders tldraw blocks as durable placeholders by default so startup and production builds do not eagerly load the live `tldraw` runtime. `TldrawWhiteboard` remains available for explicit/lazy use and keeps its renderer tests.
 - Whiteboard prop writes re-resolve the live BlockNote block by id before mutating it, and disappear as no-ops if a note reload or mode switch has already removed that block.
 - The tldraw runtime receives Tolaria's resolved light/dark mode as its user color scheme, so embedded whiteboards follow the app appearance and update while mounted.
 - Mermaid and tldraw both register small codecs with the shared durable fenced-block pipeline; scanner, token, block injection, and mixed serialization mechanics live in one owner.
@@ -878,7 +881,7 @@ Managed by `useSettings` hook and `SettingsPanel` component. `theme_mode` is ins
 ## Updates & Feature Flags
 
 ### Hooks
-- **`useUpdater(releaseChannel)`** — Channel-aware updater state machine. Checks the selected feed, surfaces checking/available/downloading/ready states, and delegates install work to Rust.
+- **`useUpdater(releaseChannel)`** — Channel-aware updater state machine. Startup checks are scheduled through `scheduleStartupIntegrationCheck()` with a longer update-specific delay so the local vault/editor UI paints first. Manual update checks still run immediately.
 - **`useFeatureFlag(flag)`** — Returns boolean for a named feature flag. Checks `localStorage` override (`ff_<name>`), then falls back to telemetry-backed evaluation. Type-safe via `FeatureFlagName` union.
 
 ### Frontend helpers
@@ -886,12 +889,12 @@ Managed by `useSettings` hook and `SettingsPanel` component. `theme_mode` is ins
 - **`src/lib/appUpdater.ts`** — Thin wrapper around the Tauri updater commands. Keeps the React hook free of endpoint-selection details.
 
 ### Rust
-- **`src-tauri/src/app_updater.rs`** — Chooses the correct update endpoint and adapts Tauri updater results into frontend-friendly payloads. Stable uses the public `stable/latest.json` feed. Alpha first resolves the newest non-draft `alpha-vYYYY.M.D-alpha.NNNN` GitHub Release asset named `alpha-latest.json`, then falls back to the public `alpha/latest.json` feed if the release lookup is unavailable.
+- **`src-tauri/src/app_updater.rs`** — Chooses the correct update endpoint and adapts Tauri updater results into frontend-friendly payloads. Stable uses the public `stable/latest.json` feed. Alpha first resolves the newest non-draft `alpha-vYYYY.M.D-alpha.NNNN` GitHub Release asset named `alpha-latest.json`, then falls back to the public `alpha/latest.json` feed if the release lookup is unavailable. Local fork builds keep official upstream updates disabled unless built with `TOLARIA_ENABLE_OFFICIAL_UPDATES=1`, preventing a fork-installed app from silently replacing itself with an official package.
 - **`src-tauri/src/commands/version.rs`** — Formats app build/version labels for the status bar, including calendar alpha labels and legacy release compatibility.
 
 ### Tauri Commands
-- **`check_for_app_update`** — Channel-aware update manifest lookup.
-- **`download_and_install_app_update`** — Channel-aware download/install with streamed progress events.
+- **`check_for_app_update`** — Channel-aware update manifest lookup; local fork builds without official-update opt-in return no available update.
+- **`download_and_install_app_update`** — Channel-aware download/install with streamed progress events; local fork builds without official-update opt-in reject official package installation before download.
 
 ### CI/CD
 - **`.github/workflows/release.yml`** — Alpha prereleases from every push to `main` using calendar-semver technical versions (`YYYY.M.D-alpha.N`) and clean `Alpha YYYY.M.D.N` release names. GitHub alpha tags zero-pad the prerelease sequence (`alpha-vYYYY.M.D-alpha.NNNN`) so GitHub release ordering stays chronological while the shipped app version remains `YYYY.M.D-alpha.N`. Publishes `alpha/latest.json` with macOS Apple Silicon/Intel, Linux x64, and Windows x64 updater entries, then refreshes the legacy `latest.json` / `latest-canary.json` aliases to the alpha feed. The docs/release Pages job reads the stable manifest from the latest stable release asset instead of copying the live Pages URL, uploads the built site as a Pages artifact, and deploys it with GitHub's official Pages action so the public updater JSON changes as part of the release workflow. macOS release assets use `Tolaria_<version>_macOS_Silicon` and `Tolaria_<version>_macOS_Intel` base names. Packaged builds pass the computed version as `VITE_SENTRY_RELEASE`, which is retained as a diagnostic build-version tag but not registered as a normal Sentry release for alpha builds.

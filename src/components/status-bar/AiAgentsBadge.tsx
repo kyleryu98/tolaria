@@ -1,5 +1,6 @@
-import { AlertTriangle, ChevronsUpDown } from 'lucide-react'
-import { Sparkle } from '@phosphor-icons/react'
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.js'
+import ChevronsUpDown from 'lucide-react/dist/esm/icons/chevrons-up-down.js'
+import { Sparkle } from '@phosphor-icons/react/Sparkle'
 import { Button } from '@/components/ui/button'
 import {
   AI_AGENT_DEFINITIONS,

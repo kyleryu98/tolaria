@@ -1,5 +1,5 @@
 import type { ComponentType, SVGAttributes } from 'react'
-import { X } from '@phosphor-icons/react'
+import { X } from '@phosphor-icons/react/X'
 import { NoteTitleIcon } from '../NoteTitleIcon'
 
 export function StatusSuffix({ isArchived }: { isArchived: boolean }) {

@@ -278,7 +278,7 @@ mod tests {
     #[test]
     fn test_extract_snippet_long() {
         let long_line = "a".repeat(300);
-        let content = format!("start\n{}keyword{}\nend", long_line, long_line);
+        let content = format!("start\n{long_line}keyword{long_line}\nend");
         let snippet = snippet!(&content, "keyword");
         assert!(snippet.len() <= 203); // 200 + "…" (3 bytes UTF-8)
     }

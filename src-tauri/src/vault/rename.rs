@@ -100,7 +100,7 @@ fn replace_wikilinks_in_content(content: &str, re: &Regex, new_target: &str) -> 
     }
     let replaced = re.replace_all(content, |caps: &regex::Captures| match caps.get(1) {
         Some(pipe) => format!("[[{}{}]]", new_target, pipe.as_str()),
-        None => format!("[[{}]]", new_target),
+        None => format!("[[{new_target}]]"),
     });
     if replaced != content {
         Some(replaced.into_owned())
@@ -378,7 +378,7 @@ pub fn rename_note_filename(
         .map_err(|e| format!("Failed to read {}: {}", request.old_path, e))?;
     let fm_title = extract_fm_title_value(&content);
     let old_title = super::extract_title(fm_title.as_deref(), &content, &old_filename);
-    let new_filename = format!("{}.md", normalized_stem);
+    let new_filename = format!("{normalized_stem}.md");
 
     if old_filename == new_filename {
         return Ok(unchanged_result(old_file));
@@ -968,9 +968,8 @@ mod tests {
 
         let expected_slug = title_to_slug(new_title.as_ref());
         assert!(
-            result.new_path.ends_with(&format!("{}.md", expected_slug)),
-            "new path should end with slug: {}",
-            expected_slug
+            result.new_path.ends_with(&format!("{expected_slug}.md")),
+            "new path should end with slug: {expected_slug}"
         );
         assert!(!old_path.exists(), "old file should be removed");
         assert!(

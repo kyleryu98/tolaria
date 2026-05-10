@@ -1,4 +1,4 @@
-import { Folder } from '@phosphor-icons/react'
+import { Folder } from '@phosphor-icons/react/Folder'
 import { Input } from '@/components/ui/input'
 import { useSidebarInlineRenameInput } from '../sidebar/sidebarHooks'
 

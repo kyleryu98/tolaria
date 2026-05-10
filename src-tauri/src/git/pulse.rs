@@ -81,14 +81,14 @@ pub fn get_vault_pulse(
         ])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git log: {}", e))?;
+        .map_err(|e| format!("Failed to run git log: {e}"))?;
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
         if stderr.contains("does not have any commits yet") {
             return Ok(Vec::new());
         }
-        return Err(format!("git log failed: {}", stderr));
+        return Err(format!("git log failed: {stderr}"));
     }
 
     let github_base = get_github_base_url(vault_path);
@@ -110,7 +110,7 @@ fn get_github_base_url(vault_path: &str) -> Option<String> {
 
     let url = String::from_utf8_lossy(&output.stdout).trim().to_string();
     let repo_path = parse_github_repo_path(&url)?;
-    Some(format!("https://github.com/{}", repo_path))
+    Some(format!("https://github.com/{repo_path}"))
 }
 
 fn parse_pulse_output(stdout: &str, github_base: &Option<String>) -> Vec<PulseCommit> {
@@ -166,7 +166,7 @@ fn parse_commit_header(line: &str, github_base: &Option<String>) -> Option<Pulse
         .unwrap_or(0);
     let github_url = github_base
         .as_ref()
-        .map(|base| format!("{}/commit/{}", base, hash));
+        .map(|base| format!("{base}/commit/{hash}"));
 
     Some(PulseCommit {
         hash: hash.to_string(),
@@ -209,14 +209,14 @@ pub fn get_last_commit_info(vault_path: &str) -> Result<Option<LastCommitInfo>, 
         .args(["log", "-1", "--format=%H|%h"])
         .current_dir(vault)
         .output()
-        .map_err(|e| format!("Failed to run git log: {}", e))?;
+        .map_err(|e| format!("Failed to run git log: {e}"))?;
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
         if stderr.contains("does not have any commits yet") {
             return Ok(None);
         }
-        return Err(format!("git log failed: {}", stderr));
+        return Err(format!("git log failed: {stderr}"));
     }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
@@ -243,7 +243,7 @@ pub fn get_last_commit_info(vault_path: &str) -> Result<Option<LastCommitInfo>, 
 
 /// Try to build a GitHub commit URL from the origin remote URL.
 fn get_github_commit_url(vault_path: &str, full_hash: &str) -> Option<String> {
-    get_github_base_url(vault_path).map(|base| format!("{}/commit/{}", base, full_hash))
+    get_github_base_url(vault_path).map(|base| format!("{base}/commit/{full_hash}"))
 }
 
 #[cfg(test)]
@@ -322,12 +322,8 @@ mod tests {
         let vp = vault.to_str().unwrap();
 
         for i in 0..5 {
-            fs::write(
-                vault.join(format!("note{}.md", i)),
-                format!("# Note {}\n", i),
-            )
-            .unwrap();
-            git_commit(vp, &format!("Add note {}", i)).unwrap();
+            fs::write(vault.join(format!("note{i}.md")), format!("# Note {i}\n")).unwrap();
+            git_commit(vp, &format!("Add note {i}")).unwrap();
         }
 
         let pulse = get_vault_pulse(vp, 3, 0).unwrap();

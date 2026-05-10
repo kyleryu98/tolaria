@@ -23,8 +23,18 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react'
-import { Moon, Sun, X } from '@phosphor-icons/react'
-import { Bot, Copy, Folder, GitBranch, ListChecks, Monitor, Palette, RefreshCw, ShieldCheck } from 'lucide-react'
+import { Moon } from '@phosphor-icons/react/Moon'
+import { Sun } from '@phosphor-icons/react/Sun'
+import { X } from '@phosphor-icons/react/X'
+import Bot from 'lucide-react/dist/esm/icons/bot.js'
+import Copy from 'lucide-react/dist/esm/icons/copy.js'
+import Folder from 'lucide-react/dist/esm/icons/folder.js'
+import GitBranch from 'lucide-react/dist/esm/icons/git-branch.js'
+import ListChecks from 'lucide-react/dist/esm/icons/list-checks.js'
+import Monitor from 'lucide-react/dist/esm/icons/monitor.js'
+import Palette from 'lucide-react/dist/esm/icons/palette.js'
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw.js'
+import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check.js'
 import type { Settings } from '../types'
 import {
   APP_LOCALES,

@@ -53,12 +53,12 @@ impl<'a> YamlText<'a> {
                 if line.is_empty() {
                     String::new()
                 } else {
-                    format!("  {}", line)
+                    format!("  {line}")
                 }
             })
             .collect::<Vec<_>>()
             .join("\n");
-        format!("|\n{}", indented)
+        format!("|\n{indented}")
     }
 
     /// Check whether a YAML key needs quoting (contains spaces, special chars, etc.).
@@ -84,7 +84,7 @@ fn format_yaml_number(n: f64) -> String {
     if n.fract() == 0.0 {
         format!("{}", n as i64)
     } else {
-        format!("{}", n)
+        format!("{n}")
     }
 }
 

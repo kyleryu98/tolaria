@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react'
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
 import { useUpdater } from './useUpdater'
+import { STARTUP_UPDATE_CHECK_DELAY_MS } from './startupDefer'
 import {
   clearRestartRequiredAfterUpdate,
   isRestartRequiredAfterUpdate,
@@ -104,7 +105,7 @@ async function performManualCheck(
 
 async function advanceAutoCheck() {
   await act(async () => {
-    await vi.advanceTimersByTimeAsync(3500)
+    await vi.advanceTimersByTimeAsync(STARTUP_UPDATE_CHECK_DELAY_MS)
   })
 }
 

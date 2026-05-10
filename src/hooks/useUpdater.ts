@@ -8,6 +8,7 @@ import {
 } from '../lib/appUpdater'
 import { formatCalendarVersionForDisplay } from '../utils/calendarVersion'
 import { openExternalUrl } from '../utils/url'
+import { scheduleStartupIntegrationCheck, STARTUP_UPDATE_CHECK_DELAY_MS } from './startupDefer'
 
 const RELEASE_NOTES_URL = 'https://refactoringhq.github.io/tolaria/'
 
@@ -125,8 +126,7 @@ export function useUpdater(
 
   useEffect(() => {
     if (!isTauri()) return
-    const timer = setTimeout(() => { checkForUpdates() }, 3000)
-    return () => clearTimeout(timer)
+    return scheduleStartupIntegrationCheck(() => { void checkForUpdates() }, STARTUP_UPDATE_CHECK_DELAY_MS)
   }, [checkForUpdates])
 
   const startDownload = useCallback(async () => {

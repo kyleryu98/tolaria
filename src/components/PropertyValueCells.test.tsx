@@ -94,17 +94,6 @@ vi.mock('./IconEditableValue', () => ({
   ),
 }))
 
-vi.mock('@/components/ui/calendar', () => ({
-  Calendar: ({ onSelect }: { onSelect: (value: Date) => void }) => (
-    <button
-      data-testid="date-picker-calendar"
-      onClick={() => onSelect(new Date(2026, 3, 22))}
-    >
-      pick
-    </button>
-  ),
-}))
-
 vi.mock('@/components/ui/popover', () => ({
   Popover: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   PopoverTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -278,7 +267,7 @@ describe('PropertyValueCells', () => {
       />,
     )
 
-    fireEvent.click(screen.getByTestId('date-picker-calendar'))
+    fireEvent.change(screen.getByTestId('date-picker-calendar'), { target: { value: '2026-04-22' } })
     expect(onSave).toHaveBeenCalledWith('Due', '2026-04-22')
 
     rerender(
@@ -299,7 +288,7 @@ describe('PropertyValueCells', () => {
     expect(onSave).toHaveBeenCalledWith('Due', '')
   })
 
-  it('auto-detects scalar display modes and delegates array values correctly', () => {
+  it('auto-detects scalar display modes and delegates array values correctly', async () => {
     const onSave = vi.fn()
     const onSaveList = vi.fn()
     const onStartEdit = vi.fn()
@@ -368,7 +357,7 @@ describe('PropertyValueCells', () => {
         onSaveList={onSaveList}
       />,
     )
-    fireEvent.click(screen.getByTestId('icon-value'))
+    fireEvent.click(await screen.findByTestId('icon-value'))
     expect(onSave).toHaveBeenCalledWith('_icon', 'sparkles')
 
     rerender(

@@ -1,5 +1,6 @@
-import { MagnifyingGlass, Plus } from '@phosphor-icons/react'
-import { Loader2 } from 'lucide-react'
+import { MagnifyingGlass } from '@phosphor-icons/react/MagnifyingGlass'
+import { Plus } from '@phosphor-icons/react/Plus'
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2.js'
 import type { VaultEntry } from '../../types'
 import type { SortOption, SortDirection } from '../../utils/noteListHelpers'
 import { translate, type AppLocale } from '../../lib/i18n'

@@ -1,9 +1,18 @@
 import { type KeyboardEvent, type ReactNode, useCallback } from 'react'
-import {
-  PencilSimple, MagnifyingGlass, Trash, ChartBar, Eye,
-  CircleNotch, CheckCircle, XCircle, CaretRight, CaretDown,
-  Terminal, File, FolderOpen, NotePencil,
-} from '@phosphor-icons/react'
+import { PencilSimple } from '@phosphor-icons/react/PencilSimple'
+import { MagnifyingGlass } from '@phosphor-icons/react/MagnifyingGlass'
+import { Trash } from '@phosphor-icons/react/Trash'
+import { ChartBar } from '@phosphor-icons/react/ChartBar'
+import { Eye } from '@phosphor-icons/react/Eye'
+import { CircleNotch } from '@phosphor-icons/react/CircleNotch'
+import { CheckCircle } from '@phosphor-icons/react/CheckCircle'
+import { XCircle } from '@phosphor-icons/react/XCircle'
+import { CaretRight } from '@phosphor-icons/react/CaretRight'
+import { CaretDown } from '@phosphor-icons/react/CaretDown'
+import { Terminal } from '@phosphor-icons/react/Terminal'
+import { File } from '@phosphor-icons/react/File'
+import { FolderOpen } from '@phosphor-icons/react/FolderOpen'
+import { NotePencil } from '@phosphor-icons/react/NotePencil'
 
 export type AiActionStatus = 'pending' | 'done' | 'error'
 

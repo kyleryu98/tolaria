@@ -505,6 +505,50 @@ describe('useNoteCreation hook', () => {
     vi.restoreAllMocks()
   })
 
+  it('handleCreateNoteImmediate persists notes inside the selected folder', async () => {
+    vi.mocked(isTauri).mockReturnValue(true)
+    vi.mocked(invoke).mockResolvedValueOnce(undefined)
+    vi.spyOn(Date, 'now').mockReturnValue(1700000000000)
+    const { result } = renderHook(() => useNoteCreation(makeConfig(), tabDeps))
+
+    await act(async () => {
+      result.current.handleCreateNoteImmediate(undefined, 'Game Dev')
+      await flushImmediateCreate()
+    })
+
+    expect(vi.mocked(invoke)).toHaveBeenCalledWith('create_note_content', {
+      path: '/test/vault/Game Dev/untitled-note-1700000000.md',
+      content: expect.stringContaining('type: Note'),
+    })
+    expect(addEntry).toHaveBeenCalledWith(expect.objectContaining({
+      path: '/test/vault/Game Dev/untitled-note-1700000000.md',
+      filename: 'untitled-note-1700000000.md',
+      isA: 'Note',
+    }))
+    vi.restoreAllMocks()
+  })
+
+  it('handleCreateNoteImmediate ignores unsafe selected folder paths', async () => {
+    vi.mocked(isTauri).mockReturnValue(true)
+    vi.mocked(invoke).mockResolvedValueOnce(undefined)
+    vi.spyOn(Date, 'now').mockReturnValue(1700000000000)
+    const { result } = renderHook(() => useNoteCreation(makeConfig(), tabDeps))
+
+    await act(async () => {
+      result.current.handleCreateNoteImmediate(undefined, '../outside')
+      await flushImmediateCreate()
+    })
+
+    expect(vi.mocked(invoke)).toHaveBeenCalledWith('create_note_content', {
+      path: '/test/vault/untitled-note-1700000000.md',
+      content: expect.stringContaining('type: Note'),
+    })
+    expect(addEntry).toHaveBeenCalledWith(expect.objectContaining({
+      path: '/test/vault/untitled-note-1700000000.md',
+    }))
+    vi.restoreAllMocks()
+  })
+
   it('handleCreateNoteImmediate slugifies custom type names for filenames', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(1700000000000)
     const { result } = renderHook(() => useNoteCreation(makeConfig(), tabDeps))

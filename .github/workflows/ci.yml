@@ -50,7 +50,7 @@ jobs:
       - name: Vite build check
         # TypeScript is checked explicitly above; run Vite directly here to avoid
         # paying for the package build script's duplicate `tsc -b` pass.
-        run: pnpm exec vite build
+        run: pnpm vite:build
 
       - name: Docs build check
         run: pnpm docs:build

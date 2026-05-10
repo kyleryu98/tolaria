@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { CaretDown, CaretRight } from '@phosphor-icons/react'
+import { CaretDown } from '@phosphor-icons/react/CaretDown'
+import { CaretRight } from '@phosphor-icons/react/CaretRight'
 import { SidebarCountPill } from '../SidebarParts'
 import { SIDEBAR_GROUP_HEADER_PADDING } from './sidebarStyles'
 

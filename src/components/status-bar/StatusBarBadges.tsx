@@ -1,15 +1,14 @@
 import { useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react'
-import {
-  AlertTriangle,
-  ArrowDown,
-  Cpu,
-  GitBranch,
-  GitCommitHorizontal,
-  Loader2,
-  RefreshCw,
-  Terminal,
-} from 'lucide-react'
-import { GitDiff, Pulse } from '@phosphor-icons/react'
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.js'
+import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down.js'
+import Cpu from 'lucide-react/dist/esm/icons/cpu.js'
+import GitBranch from 'lucide-react/dist/esm/icons/git-branch.js'
+import GitCommitHorizontal from 'lucide-react/dist/esm/icons/git-commit-horizontal.js'
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2.js'
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw.js'
+import Terminal from 'lucide-react/dist/esm/icons/terminal.js'
+import { GitDiff } from '@phosphor-icons/react/GitDiff'
+import { Pulse } from '@phosphor-icons/react/Pulse'
 import { ActionTooltip, type ActionTooltipCopy } from '@/components/ui/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'

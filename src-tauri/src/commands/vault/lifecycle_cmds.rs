@@ -19,7 +19,7 @@ pub fn create_empty_vault(target_path: String) -> Result<String, String> {
 fn initialize_empty_vault(vault_dir: &Path, vault_path: &str) -> Result<(), String> {
     ensure_directory_is_missing_or_empty(vault_dir)?;
     std::fs::create_dir_all(vault_dir)
-        .map_err(|e| format!("Failed to create vault directory: {}", e))?;
+        .map_err(|e| format!("Failed to create vault directory: {e}"))?;
 
     git::init_repo(vault_path)?;
     vault::seed_config_files(vault_path);

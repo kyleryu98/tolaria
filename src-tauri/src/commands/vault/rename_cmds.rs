@@ -69,7 +69,7 @@ pub fn move_note_to_folder(
                 |validated_folder_path| {
                     let validated_folder = Path::new(validated_folder_path);
                     if !validated_folder.is_dir() {
-                        return Err(format!("Folder does not exist: {}", trimmed_folder_path));
+                        return Err(format!("Folder does not exist: {trimmed_folder_path}"));
                     }
                     vault::move_note_to_folder(vault::MoveNoteToFolderRequest {
                         vault_path: requested_root,

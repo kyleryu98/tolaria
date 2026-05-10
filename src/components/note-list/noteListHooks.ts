@@ -988,7 +988,7 @@ interface UseNoteListInteractionsParams {
   onAutoTriggerDiff?: () => void
   onDiscardFile?: (relativePath: string) => Promise<void>
   openContextMenuForEntry: (entry: VaultEntry, point: { x: number; y: number }) => void
-  onCreateNote: (type?: string) => void
+  onCreateNote: (type?: string, folderPath?: string) => void
 }
 
 function resolveChangesContextMenuEntry(
@@ -1222,6 +1222,11 @@ export function useNoteListInteractions({
   })
 
   const handleCreateNote = useCallback(() => {
+    if (selection.kind === 'folder') {
+      onCreateNote(undefined, selection.path)
+      return
+    }
+
     onCreateNote(selection.kind === 'sectionGroup' ? selection.type : undefined)
   }, [onCreateNote, selection])
 

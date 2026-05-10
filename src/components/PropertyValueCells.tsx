@@ -1,14 +1,13 @@
-import { useState, useCallback, useRef, type ReactNode } from 'react'
+import { Suspense, lazy, useState, useCallback, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { ArrowUpRight } from '@phosphor-icons/react'
+import { ArrowUpRight } from '@phosphor-icons/react/ArrowUpRight'
 import type { FrontmatterValue } from './Inspector'
 import { EditableValue, TagPillList, UrlValue } from './EditableValue'
 import { isUrlValue } from '../utils/url'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { XIcon } from 'lucide-react'
+import XIcon from 'lucide-react/dist/esm/icons/x.js'
 import { trackDatePropertyDirectEntrySaved } from '../lib/productAnalytics'
 import { translate, type AppLocale } from '../lib/i18n'
 import { isValidCssColor } from '../utils/colorUtils'
@@ -24,9 +23,20 @@ import { getStatusStyle } from '../utils/statusStyles'
 import { TagsDropdown } from './TagsDropdown'
 import { getTagStyle } from '../utils/tagStyles'
 import { ColorEditableValue } from './ColorInput'
-import { IconEditableValue } from './IconEditableValue'
 import { PROPERTY_CHIP_STYLE } from './propertyChipStyles'
 import { canonicalSystemMetadataKey } from '../utils/systemMetadata'
+
+const IconEditableValue = lazy(() => import('./IconEditableValue').then((module) => ({
+  default: module.IconEditableValue,
+})))
+
+function IconEditableValueFallback({ value }: { value: string }) {
+  return (
+    <span className="inline-flex h-6 min-w-0 items-center rounded-md bg-muted/60 px-2 text-[12px] text-foreground">
+      <span className="min-w-0 truncate">{value || '\u2014'}</span>
+    </span>
+  )
+}
 
 const ISO_DATE_INPUT_RE = /^(\d{4})-(\d{2})-(\d{2})$/
 const DEFAULT_DATE_PICKER_START_YEAR = 1800
@@ -319,11 +329,6 @@ function DateValue({ value, onSave, locale = 'en', autoOpen = false, onCancel }:
     setOpen(false)
   }
 
-  const handleSelect = (day: Date | undefined) => {
-    if (day) onSave(dateToISO(day))
-    setOpen(false)
-  }
-
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     onSave('')
@@ -387,16 +392,19 @@ function DateValue({ value, onSave, locale = 'en', autoOpen = false, onCancel }:
             data-testid="date-picker-input"
           />
         </div>
-        <div className="pb-8">
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={handleSelect}
-            defaultMonth={selectedDate}
-            captionLayout="dropdown"
-            navLayout="after"
-            startMonth={datePickerStartMonth(selectedDate)}
-            endMonth={datePickerEndMonth(selectedDate)}
+        <div className="p-2">
+          <Input
+            className="h-8 w-full min-w-[8.75rem] border-ring bg-background px-2 py-1 text-left font-mono text-[13px] tabular-nums"
+            type="date"
+            min={dateToISO(datePickerStartMonth(selectedDate))}
+            max={dateToISO(datePickerEndMonth(selectedDate))}
+            value={draftValue}
+            onChange={(event) => {
+              const parsed = parseDateInput(event.target.value)
+              if (!parsed) return
+              onSave(parsed)
+              setOpen(false)
+            }}
             data-testid="date-picker-calendar"
           />
         </div>
@@ -617,7 +625,11 @@ function ScalarValueCell(props: SmartCellProps) {
   })
 
   if (canonicalSystemMetadataKey(propKey) === '_icon') {
-    return <IconEditableValue {...editProps} />
+    return (
+      <Suspense fallback={<IconEditableValueFallback value={String(value ?? '')} />}>
+        <IconEditableValue {...editProps} />
+      </Suspense>
+    )
   }
 
   const resolvedMode = displayMode === 'text' ? autoDetectFromValue(propKey, value) : displayMode

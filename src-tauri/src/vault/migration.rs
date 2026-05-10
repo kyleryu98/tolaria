@@ -65,7 +65,7 @@ fn migrate_file_is_a_to_type(path: &Path) -> Result<bool, String> {
     if !has_type {
         if let Some(ref val) = is_a_value {
             // Insert type: at the beginning (after other keys is fine too, but beginning is clean)
-            new_lines.insert(0, format!("type: {}", val));
+            new_lines.insert(0, format!("type: {val}"));
         }
     }
 
@@ -84,8 +84,7 @@ pub fn migrate_is_a_to_type(vault_path: &str) -> Result<usize, String> {
     let vault = Path::new(vault_path);
     if !vault.exists() || !vault.is_dir() {
         return Err(format!(
-            "Vault path does not exist or is not a directory: {}",
-            vault_path
+            "Vault path does not exist or is not a directory: {vault_path}"
         ));
     }
 

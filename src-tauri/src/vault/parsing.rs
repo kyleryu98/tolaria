@@ -573,8 +573,7 @@ mod tests {
         let snippet = extract_snippet(content);
         assert!(
             snippet.starts_with("Migration is successful"),
-            "snippet should start with first bullet content, got: {}",
-            snippet
+            "snippet should start with first bullet content, got: {snippet}"
         );
         assert!(snippet.contains("No regressions on open rate"));
     }
@@ -606,8 +605,7 @@ mod tests {
         let snippet = extract_snippet(content);
         assert!(
             snippet.starts_with("Actual paragraph content"),
-            "paragraph content should be preferred over headings, got: {}",
-            snippet
+            "paragraph content should be preferred over headings, got: {snippet}"
         );
     }
 

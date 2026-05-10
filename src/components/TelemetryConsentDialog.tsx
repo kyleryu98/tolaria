@@ -1,4 +1,4 @@
-import { ShieldCheck } from '@phosphor-icons/react'
+import { ShieldCheck } from '@phosphor-icons/react/ShieldCheck'
 import { OnboardingShell } from './OnboardingShell'
 import { Button } from './ui/button'
 

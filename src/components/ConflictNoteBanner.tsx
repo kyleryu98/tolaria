@@ -1,4 +1,4 @@
-import { AlertTriangle } from 'lucide-react'
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle.js'
 import { translate, type AppLocale } from '../lib/i18n'
 
 interface ConflictNoteBannerProps {

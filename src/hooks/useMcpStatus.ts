@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObjec
 import { invoke } from '@tauri-apps/api/core'
 import { isTauri, mockInvoke } from '../mock-tauri'
 import { createTranslator, type AppLocale } from '../lib/i18n'
+import { scheduleStartupIntegrationCheck } from './startupDefer'
 
 export type McpStatus = 'checking' | 'installed' | 'not_installed'
 type ManualConfigSnippet = string
@@ -153,11 +154,16 @@ export function useMcpStatus(
     let cancelled = false
     setStatus('checking') // eslint-disable-line react-hooks/set-state-in-effect -- reset to checking on vault switch
 
-    fetchMcpStatus(vaultPath).then((nextStatus) => {
-      if (!cancelled) setStatus(nextStatus)
+    const cancelScheduledCheck = scheduleStartupIntegrationCheck(() => {
+      fetchMcpStatus(vaultPath).then((nextStatus) => {
+        if (!cancelled) setStatus(nextStatus)
+      })
     })
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+      cancelScheduledCheck()
+    }
   }, [vaultPath])
 
   const connectMcp = useCallback(async () => {

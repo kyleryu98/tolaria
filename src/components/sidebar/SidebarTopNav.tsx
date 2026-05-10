@@ -1,4 +1,6 @@
-import { Archive, FileText, Tray } from '@phosphor-icons/react'
+import { Archive } from '@phosphor-icons/react/Archive'
+import { FileText } from '@phosphor-icons/react/FileText'
+import { Tray } from '@phosphor-icons/react/Tray'
 import type { SidebarSelection } from '../../types'
 import { isSelectionActive, NavItem } from '../SidebarParts'
 import { translate, type AppLocale } from '../../lib/i18n'

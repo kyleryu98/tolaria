@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { CaretDown, CaretRight } from '@phosphor-icons/react'
+import { CaretDown } from '@phosphor-icons/react/CaretDown'
+import { CaretRight } from '@phosphor-icons/react/CaretRight'
 import type { VaultEntry } from '../../types'
 import {
   type SortOption, type SortDirection, type SortConfig, type RelationshipGroup,

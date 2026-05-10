@@ -1,4 +1,5 @@
-import { Archive, ArrowUUpLeft } from '@phosphor-icons/react'
+import { Archive } from '@phosphor-icons/react/Archive'
+import { ArrowUUpLeft } from '@phosphor-icons/react/ArrowUUpLeft'
 import { translate, type AppLocale } from '../lib/i18n'
 
 interface ArchivedNoteBannerProps {

@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { buildSectionGroup, buildDynamicSections, collectActiveTypes } from '../utils/sidebarSections'
 import { resolveIcon } from '../utils/iconRegistry'
 import type { VaultEntry } from '../types'
-import { GearSix, CookingPot, FileText } from '@phosphor-icons/react'
+import { GearSix } from '@phosphor-icons/react/GearSix'
+import { CookingPot } from '@phosphor-icons/react/CookingPot'
+import { FileText } from '@phosphor-icons/react/FileText'
 
 const baseEntry: VaultEntry = {
   path: '', filename: '', title: '', isA: null, aliases: [], belongsTo: [], relatedTo: [],

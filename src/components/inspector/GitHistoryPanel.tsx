@@ -1,4 +1,4 @@
-import { ArrowCounterClockwise } from '@phosphor-icons/react'
+import { ArrowCounterClockwise } from '@phosphor-icons/react/ArrowCounterClockwise'
 import type { GitCommit } from '../../types'
 
 function formatRelativeDate(timestamp: number): string {

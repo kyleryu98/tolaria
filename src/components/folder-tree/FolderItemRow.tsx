@@ -1,8 +1,6 @@
 import type { MouseEvent as ReactMouseEvent } from 'react'
-import {
-  Folder,
-  FolderOpen,
-} from '@phosphor-icons/react'
+import { Folder } from '@phosphor-icons/react/Folder'
+import { FolderOpen } from '@phosphor-icons/react/FolderOpen'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { FolderNode } from '../../types'

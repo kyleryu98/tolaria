@@ -5,14 +5,18 @@
 
 import type { VaultEntry } from '../types'
 import type { SectionGroup } from '../components/SidebarParts'
-import { resolveIcon } from './iconRegistry'
+import { resolveIcon } from './iconResolver'
 import { pluralizeType } from '../hooks/useCommandRegistry'
 import { isLegacyJournalingType } from './legacyTypes'
 import { canonicalizeTypeName } from './vaultTypes'
-import {
-  Wrench, Flask, Target, ArrowsClockwise,
-  Users, CalendarBlank, Tag, StackSimple,
-} from '@phosphor-icons/react'
+import { Wrench } from '@phosphor-icons/react/Wrench'
+import { Flask } from '@phosphor-icons/react/Flask'
+import { Target } from '@phosphor-icons/react/Target'
+import { ArrowsClockwise } from '@phosphor-icons/react/ArrowsClockwise'
+import { Users } from '@phosphor-icons/react/Users'
+import { CalendarBlank } from '@phosphor-icons/react/CalendarBlank'
+import { Tag } from '@phosphor-icons/react/Tag'
+import { StackSimple } from '@phosphor-icons/react/StackSimple'
 
 const BUILT_IN_SECTION_GROUPS: SectionGroup[] = [
   { label: 'Projects', type: 'Project', Icon: Wrench },

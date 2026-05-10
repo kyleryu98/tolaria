@@ -226,24 +226,23 @@ fn get_settings_at(path: &PathBuf) -> Result<Settings, String> {
     if !path.exists() {
         return Ok(Settings::default());
     }
-    let content =
-        fs::read_to_string(path).map_err(|e| format!("Failed to read settings: {}", e))?;
+    let content = fs::read_to_string(path).map_err(|e| format!("Failed to read settings: {e}"))?;
     let settings =
-        serde_json::from_str(&content).map_err(|e| format!("Failed to parse settings: {}", e))?;
+        serde_json::from_str(&content).map_err(|e| format!("Failed to parse settings: {e}"))?;
     Ok(normalize_settings(settings))
 }
 
 fn save_settings_at(path: &PathBuf, settings: Settings) -> Result<(), String> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
-            .map_err(|e| format!("Failed to create config directory: {}", e))?;
+            .map_err(|e| format!("Failed to create config directory: {e}"))?;
     }
 
     let cleaned = normalize_settings(settings);
 
     let json = serde_json::to_string_pretty(&cleaned)
-        .map_err(|e| format!("Failed to serialize settings: {}", e))?;
-    fs::write(path, json).map_err(|e| format!("Failed to write settings: {}", e))
+        .map_err(|e| format!("Failed to serialize settings: {e}"))?;
+    fs::write(path, json).map_err(|e| format!("Failed to write settings: {e}"))
 }
 
 pub fn get_settings() -> Result<Settings, String> {
@@ -268,10 +267,9 @@ fn get_last_vault_at(path: &PathBuf) -> Option<String> {
 fn set_last_vault_at(path: &PathBuf, vault_path: &str) -> Result<(), String> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
-            .map_err(|e| format!("Failed to create config directory: {}", e))?;
+            .map_err(|e| format!("Failed to create config directory: {e}"))?;
     }
-    fs::write(path, vault_path.trim())
-        .map_err(|e| format!("Failed to write last vault path: {}", e))
+    fs::write(path, vault_path.trim()).map_err(|e| format!("Failed to write last vault path: {e}"))
 }
 
 pub fn get_last_vault() -> Option<String> {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
-import { ArrowUp, ArrowDown } from '@phosphor-icons/react'
+import { ArrowUp } from '@phosphor-icons/react/ArrowUp'
+import { ArrowDown } from '@phosphor-icons/react/ArrowDown'
 import { translate, type AppLocale, type TranslationKey } from '../lib/i18n'
 import { type SortOption, type SortDirection, getDefaultDirection, SORT_OPTIONS } from '../utils/noteListHelpers'
 

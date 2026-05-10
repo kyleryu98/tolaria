@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { GitBranch } from 'lucide-react'
+import GitBranch from 'lucide-react/dist/esm/icons/git-branch.js'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

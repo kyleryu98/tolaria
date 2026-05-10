@@ -1,7 +1,7 @@
 import { useMemo, type HTMLAttributes } from 'react'
 import type { VaultEntry, ViewDefinition, ViewFile } from '../../types'
 import { evaluateView } from '../../utils/viewFilters'
-import { Funnel } from '@phosphor-icons/react'
+import { Funnel } from '@phosphor-icons/react/Funnel'
 import { NoteTitleIcon } from '../NoteTitleIcon'
 import { SidebarCountPill } from '../SidebarParts'
 import { SIDEBAR_ITEM_PADDING } from './sidebarStyles'

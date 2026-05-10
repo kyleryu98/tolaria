@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect, useId, useRef, type KeyboardEvent, type RefObject } from 'react'
-import { SlidersHorizontal, DotsSixVertical } from '@phosphor-icons/react'
+import { SlidersHorizontal } from '@phosphor-icons/react/SlidersHorizontal'
+import { DotsSixVertical } from '@phosphor-icons/react/DotsSixVertical'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'

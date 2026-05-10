@@ -1,4 +1,4 @@
-import { ArrowsClockwise } from '@phosphor-icons/react'
+import { ArrowsClockwise } from '@phosphor-icons/react/ArrowsClockwise'
 
 export interface DetectedRename {
   old_path: string

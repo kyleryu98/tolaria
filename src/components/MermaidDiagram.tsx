@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useState } from 'react'
-import { Maximize2 } from 'lucide-react'
+import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2.js'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

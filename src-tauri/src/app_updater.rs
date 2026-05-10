@@ -9,6 +9,8 @@ const GITHUB_RELEASES_API_URL: &str =
 const RELEASES_BASE_URL: &str = "https://refactoringhq.github.io/tolaria";
 const UPDATER_HTTP_TIMEOUT: Duration = Duration::from_secs(5);
 const UPDATER_USER_AGENT: &str = concat!("Tolaria/", env!("CARGO_PKG_VERSION"));
+const LOCAL_FORK_UPDATES_DISABLED_MESSAGE: &str =
+    "Official Tolaria updates are disabled for this local fork build";
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -174,6 +176,13 @@ fn build_updater<R: Runtime>(
         .map_err(|e| format!("Failed to build updater: {e}"))
 }
 
+fn official_updates_enabled() -> bool {
+    matches!(
+        option_env!("TOLARIA_ENABLE_OFFICIAL_UPDATES"),
+        Some("1") | Some("true") | Some("TRUE")
+    )
+}
+
 fn to_update_metadata(update: tauri_plugin_updater::Update) -> AppUpdateMetadata {
     AppUpdateMetadata {
         current_version: update.current_version,
@@ -224,6 +233,10 @@ pub async fn check_for_app_update<R: Runtime>(
     app_handle: AppHandle<R>,
     release_channel: Option<String>,
 ) -> Result<Option<AppUpdateMetadata>, String> {
+    if !official_updates_enabled() {
+        return Ok(None);
+    }
+
     let channel = ReleaseChannel::from_settings_value(release_channel.as_deref());
     let updater = build_updater(&app_handle, updater_endpoint(channel).await?)?;
     let update = updater
@@ -240,6 +253,10 @@ pub async fn download_and_install_app_update<R: Runtime>(
     expected_version: String,
     on_event: Channel<AppUpdateDownloadEvent>,
 ) -> Result<(), String> {
+    if !official_updates_enabled() {
+        return Err(LOCAL_FORK_UPDATES_DISABLED_MESSAGE.into());
+    }
+
     let channel = ReleaseChannel::from_settings_value(release_channel.as_deref());
     let updater = build_updater(&app_handle, updater_endpoint(channel).await?)?;
     let update = updater

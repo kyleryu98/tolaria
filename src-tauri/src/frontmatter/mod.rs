@@ -20,13 +20,12 @@ fn is_markdown_path(path: &Path) -> bool {
 
 fn validate_frontmatter_path(path: &str, file_path: &Path) -> Result<(), String> {
     if !file_path.exists() {
-        return Err(format!("File does not exist: {}", path));
+        return Err(format!("File does not exist: {path}"));
     }
 
     if !is_markdown_path(file_path) {
         return Err(format!(
-            "Frontmatter can only be updated on Markdown notes: {}",
-            path
+            "Frontmatter can only be updated on Markdown notes: {path}"
         ));
     }
 
@@ -42,11 +41,11 @@ where
     validate_frontmatter_path(path, file_path)?;
 
     let content =
-        fs::read_to_string(file_path).map_err(|e| format!("Failed to read {}: {}", path, e))?;
+        fs::read_to_string(file_path).map_err(|e| format!("Failed to read {path}: {e}"))?;
 
     let updated = transform(&content)?;
 
-    fs::write(file_path, &updated).map_err(|e| format!("Failed to write {}: {}", path, e))?;
+    fs::write(file_path, &updated).map_err(|e| format!("Failed to write {path}: {e}"))?;
 
     Ok(updated)
 }

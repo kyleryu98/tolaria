@@ -459,26 +459,5 @@
       "Check Git",
       "Reload"
     ]
-  },
-  {
-    "title": "Download",
-    "path": "pages/download/index.md",
-    "url": "/download/",
-    "section": "download",
-    "headings": [
-      "Latest Stable",
-      "Other Builds",
-      "Verify The Version"
-    ]
-  },
-  {
-    "title": "Releases",
-    "path": "pages/releases/index.md",
-    "url": "/releases/",
-    "section": "releases",
-    "headings": [
-      "Release Channels",
-      "Before Updating"
-    ]
   }
 ]

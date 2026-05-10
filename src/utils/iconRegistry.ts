@@ -1,337 +1,123 @@
 import type { ComponentType } from 'react'
-import {
-  Acorn, AddressBook, Airplane, Alarm, Anchor, Aperture, AppWindow, Archive, Armchair, Article,
-  ArrowsClockwise, Atom, Baby, Backpack, Bag, Balloon, Bandaids, Bank, Barbell, Barcode,
-  Barn, Baseball, Basketball, Bed, Bell, Bicycle, Binoculars, Bird, Blueprint, Boat,
-  Bone, Book, BookBookmark, BookOpen, Bookmark, Books, BowlFood, Brain, Bread, Bridge,
-  Briefcase, Broadcast, Broom, Browser, Bug, Building, BuildingOffice, Buildings, Bus, Butterfly,
-  Cactus, Cake, Calculator, Calendar, CalendarBlank, CalendarCheck, Camera, Campfire, Car, Cat,
-  Certificate, Chair, Champagne, ChartBar, ChartDonut, ChartLine, ChartPie, Chat, ChatCircle, ChatDots,
-  Check, CheckCircle, ChefHat, Church, Circuitry, City, Clipboard, ClipboardText, Clock, Cloud,
-  CloudSun, Clover, Code, Coffee, Coin, Coins, Compass, Confetti, Cookie, CookingPot,
-  Couch, CreditCard, Crown, Cube, Database, Desktop, Detective, Diamond, Dna, Dog,
-  Door, Drop, Envelope, Eye, Eyeglasses, Factory, Fan, Farm, Feather, File,
-  FileCode, FileText, FilmReel, Fingerprint, Fire, FirstAid, Fish, Flag, Flame, Flashlight,
-  Flask, Flower, FlowerLotus, Folder, FolderOpen, Football, ForkKnife, Function, Funnel, GameController,
-  Gauge, Gavel, Gear, GearSix, Ghost, Gift, GitBranch, Globe, GraduationCap, Guitar, Hammer,
-  Hand, Handshake, Headphones, Headset, Heart, Heartbeat, Horse, Hospital, Hourglass, House,
-  IceCream, IdentificationBadge, Image, Infinity as InfinityIcon, Island, Joystick, Kanban, Key, Keyboard, Knife,
-  Ladder, Lamp, Laptop, Leaf, Lifebuoy, Lightbulb, Lighthouse, Lightning, Link, List,
-  ListChecks, Lock, MagicWand, Magnet, MagnifyingGlass, Mailbox, MapPin, MaskHappy, Medal, Megaphone,
-  Meteor, Microphone, Microscope, Money, Monitor, Moon, Motorcycle, Mountains, MusicNote, Needle,
-  Network, Newspaper, Note, Notebook, Notepad, Package, PaintBrush, Palette, PaperPlane, Paperclip,
-  Park, PawPrint, Peace, Pen, Pencil, Person, Phone, Pi, PiggyBank, Pill,
-  Pizza, Planet, Plant, Playlist, Plug, PottedPlant, Prescription, Presentation, Printer, PushPin,
-  PuzzlePiece, QrCode, Quotes, Rabbit, Radio, Rainbow, Recycle, Robot, Rocket, Ruler,
-  Sailboat, Scales, Scissors, Scroll, Seal, SecurityCamera, Shield, ShieldCheck, ShootingStar, ShoppingBag,
-  ShoppingCart, Signature, Smiley, Sneaker, Snowflake, SoccerBall, Sparkle, Stack, StackSimple, Star,
-  Stethoscope, Storefront, Strategy, Student, Suitcase, Sun, Sword, TShirt, Tag, Target,
-  Television, Tent, Terminal, Ticket, Timer, Toolbox, Train, Translate, Trash, Tree,
-  TreeStructure, Trophy, Truck, Umbrella, User, UserCircle, Users, Vault, VinylRecord, Wallet,
-  Warning, Watch, Waves, Wind, Wine, Wrench,
-  type IconProps,
-} from '@phosphor-icons/react'
+import { Archive } from '@phosphor-icons/react/Archive'
+import { ArrowsClockwise } from '@phosphor-icons/react/ArrowsClockwise'
+import { Article } from '@phosphor-icons/react/Article'
+import { Book } from '@phosphor-icons/react/Book'
+import { BookOpen } from '@phosphor-icons/react/BookOpen'
+import { Books } from '@phosphor-icons/react/Books'
+import { Brain } from '@phosphor-icons/react/Brain'
+import { Briefcase } from '@phosphor-icons/react/Briefcase'
+import { CalendarBlank } from '@phosphor-icons/react/CalendarBlank'
+import { ChartBar } from '@phosphor-icons/react/ChartBar'
+import { CheckCircle } from '@phosphor-icons/react/CheckCircle'
+import { Code } from '@phosphor-icons/react/Code'
+import { CookingPot } from '@phosphor-icons/react/CookingPot'
+import { Database } from '@phosphor-icons/react/Database'
+import { Eye } from '@phosphor-icons/react/Eye'
+import { File } from '@phosphor-icons/react/File'
+import { FileText } from '@phosphor-icons/react/FileText'
+import { Flask } from '@phosphor-icons/react/Flask'
+import { Folder } from '@phosphor-icons/react/Folder'
+import { FolderOpen } from '@phosphor-icons/react/FolderOpen'
+import { GearSix } from '@phosphor-icons/react/GearSix'
+import { GitBranch } from '@phosphor-icons/react/GitBranch'
+import { Globe } from '@phosphor-icons/react/Globe'
+import { Heart } from '@phosphor-icons/react/Heart'
+import { House } from '@phosphor-icons/react/House'
+import { ImageSquare } from '@phosphor-icons/react/ImageSquare'
+import { Kanban } from '@phosphor-icons/react/Kanban'
+import { Lightbulb } from '@phosphor-icons/react/Lightbulb'
+import { Link } from '@phosphor-icons/react/Link'
+import { ListBullets } from '@phosphor-icons/react/ListBullets'
+import { ListChecks } from '@phosphor-icons/react/ListChecks'
+import { Lock } from '@phosphor-icons/react/Lock'
+import { MagnifyingGlass } from '@phosphor-icons/react/MagnifyingGlass'
+import { MapPin } from '@phosphor-icons/react/MapPin'
+import { Megaphone } from '@phosphor-icons/react/Megaphone'
+import { NotePencil } from '@phosphor-icons/react/NotePencil'
+import { Palette } from '@phosphor-icons/react/Palette'
+import { PencilSimple } from '@phosphor-icons/react/PencilSimple'
+import { Rocket } from '@phosphor-icons/react/Rocket'
+import { ShieldCheck } from '@phosphor-icons/react/ShieldCheck'
+import { Sparkle } from '@phosphor-icons/react/Sparkle'
+import { StackSimple } from '@phosphor-icons/react/StackSimple'
+import { Star } from '@phosphor-icons/react/Star'
+import { Tag } from '@phosphor-icons/react/Tag'
+import { Target } from '@phosphor-icons/react/Target'
+import { Terminal } from '@phosphor-icons/react/Terminal'
+import { Toolbox } from '@phosphor-icons/react/Toolbox'
+import { TreeStructure } from '@phosphor-icons/react/TreeStructure'
+import { Users } from '@phosphor-icons/react/Users'
+import { Warning } from '@phosphor-icons/react/Warning'
+import { Wrench } from '@phosphor-icons/react/Wrench'
+import type { IconProps } from '@phosphor-icons/react'
 
 export type { IconProps }
 export type IconEntry = { name: string; Icon: ComponentType<IconProps> }
 
 /**
- * Curated set of ~290 Phosphor icons for type/section customization.
- * Excludes: brand logos, UI-only icons (arrows, carets, alignment), redundant variants.
- * Names are kebab-case, matching the format stored in vault frontmatter.
+ * Startup-safe icon picker set.
+ *
+ * The original list imported hundreds of Phosphor components up front. That
+ * made production builds and cold starts pay for icons that are only used when
+ * a user customizes a type or icon property.
  */
 export const ICON_OPTIONS: IconEntry[] = [
-  { name: 'acorn', Icon: Acorn },
-  { name: 'address-book', Icon: AddressBook },
-  { name: 'airplane', Icon: Airplane },
-  { name: 'alarm', Icon: Alarm },
-  { name: 'anchor', Icon: Anchor },
-  { name: 'aperture', Icon: Aperture },
-  { name: 'app-window', Icon: AppWindow },
   { name: 'archive', Icon: Archive },
-  { name: 'armchair', Icon: Armchair },
-  { name: 'article', Icon: Article },
   { name: 'arrows-clockwise', Icon: ArrowsClockwise },
-  { name: 'atom', Icon: Atom },
-  { name: 'baby', Icon: Baby },
-  { name: 'backpack', Icon: Backpack },
-  { name: 'bag', Icon: Bag },
-  { name: 'balloon', Icon: Balloon },
-  { name: 'bandaids', Icon: Bandaids },
-  { name: 'bank', Icon: Bank },
-  { name: 'barbell', Icon: Barbell },
-  { name: 'barcode', Icon: Barcode },
-  { name: 'barn', Icon: Barn },
-  { name: 'baseball', Icon: Baseball },
-  { name: 'basketball', Icon: Basketball },
-  { name: 'bed', Icon: Bed },
-  { name: 'bell', Icon: Bell },
-  { name: 'bicycle', Icon: Bicycle },
-  { name: 'binoculars', Icon: Binoculars },
-  { name: 'bird', Icon: Bird },
-  { name: 'blueprint', Icon: Blueprint },
-  { name: 'boat', Icon: Boat },
-  { name: 'bone', Icon: Bone },
+  { name: 'article', Icon: Article },
   { name: 'book', Icon: Book },
-  { name: 'book-bookmark', Icon: BookBookmark },
   { name: 'book-open', Icon: BookOpen },
-  { name: 'bookmark', Icon: Bookmark },
   { name: 'books', Icon: Books },
-  { name: 'bowl-food', Icon: BowlFood },
   { name: 'brain', Icon: Brain },
-  { name: 'bread', Icon: Bread },
-  { name: 'bridge', Icon: Bridge },
   { name: 'briefcase', Icon: Briefcase },
-  { name: 'broadcast', Icon: Broadcast },
-  { name: 'broom', Icon: Broom },
-  { name: 'browser', Icon: Browser },
-  { name: 'bug', Icon: Bug },
-  { name: 'building', Icon: Building },
-  { name: 'building-office', Icon: BuildingOffice },
-  { name: 'buildings', Icon: Buildings },
-  { name: 'bus', Icon: Bus },
-  { name: 'butterfly', Icon: Butterfly },
-  { name: 'cactus', Icon: Cactus },
-  { name: 'cake', Icon: Cake },
-  { name: 'calculator', Icon: Calculator },
-  { name: 'calendar', Icon: Calendar },
   { name: 'calendar-blank', Icon: CalendarBlank },
-  { name: 'calendar-check', Icon: CalendarCheck },
-  { name: 'camera', Icon: Camera },
-  { name: 'campfire', Icon: Campfire },
-  { name: 'car', Icon: Car },
-  { name: 'cat', Icon: Cat },
-  { name: 'certificate', Icon: Certificate },
-  { name: 'chair', Icon: Chair },
-  { name: 'champagne', Icon: Champagne },
   { name: 'chart-bar', Icon: ChartBar },
-  { name: 'chart-donut', Icon: ChartDonut },
-  { name: 'chart-line', Icon: ChartLine },
-  { name: 'chart-pie', Icon: ChartPie },
-  { name: 'chat', Icon: Chat },
-  { name: 'chat-circle', Icon: ChatCircle },
-  { name: 'chat-dots', Icon: ChatDots },
-  { name: 'check', Icon: Check },
   { name: 'check-circle', Icon: CheckCircle },
-  { name: 'chef-hat', Icon: ChefHat },
-  { name: 'church', Icon: Church },
-  { name: 'circuitry', Icon: Circuitry },
-  { name: 'city', Icon: City },
-  { name: 'clipboard', Icon: Clipboard },
-  { name: 'clipboard-text', Icon: ClipboardText },
-  { name: 'clock', Icon: Clock },
-  { name: 'cloud', Icon: Cloud },
-  { name: 'cloud-sun', Icon: CloudSun },
-  { name: 'clover', Icon: Clover },
   { name: 'code', Icon: Code },
-  { name: 'coffee', Icon: Coffee },
-  { name: 'coin', Icon: Coin },
-  { name: 'coins', Icon: Coins },
-  { name: 'compass', Icon: Compass },
-  { name: 'confetti', Icon: Confetti },
-  { name: 'cookie', Icon: Cookie },
   { name: 'cooking-pot', Icon: CookingPot },
-  { name: 'couch', Icon: Couch },
-  { name: 'credit-card', Icon: CreditCard },
-  { name: 'crown', Icon: Crown },
-  { name: 'cube', Icon: Cube },
   { name: 'database', Icon: Database },
-  { name: 'desktop', Icon: Desktop },
-  { name: 'detective', Icon: Detective },
-  { name: 'diamond', Icon: Diamond },
-  { name: 'dna', Icon: Dna },
-  { name: 'dog', Icon: Dog },
-  { name: 'door', Icon: Door },
-  { name: 'drop', Icon: Drop },
-  { name: 'envelope', Icon: Envelope },
   { name: 'eye', Icon: Eye },
-  { name: 'eyeglasses', Icon: Eyeglasses },
-  { name: 'factory', Icon: Factory },
-  { name: 'fan', Icon: Fan },
-  { name: 'farm', Icon: Farm },
-  { name: 'feather', Icon: Feather },
   { name: 'file', Icon: File },
-  { name: 'file-code', Icon: FileCode },
   { name: 'file-text', Icon: FileText },
-  { name: 'film-reel', Icon: FilmReel },
-  { name: 'fingerprint', Icon: Fingerprint },
-  { name: 'fire', Icon: Fire },
-  { name: 'first-aid', Icon: FirstAid },
-  { name: 'fish', Icon: Fish },
-  { name: 'flag', Icon: Flag },
-  { name: 'flame', Icon: Flame },
-  { name: 'flashlight', Icon: Flashlight },
   { name: 'flask', Icon: Flask },
-  { name: 'flower', Icon: Flower },
-  { name: 'flower-lotus', Icon: FlowerLotus },
   { name: 'folder', Icon: Folder },
   { name: 'folder-open', Icon: FolderOpen },
-  { name: 'football', Icon: Football },
-  { name: 'fork-knife', Icon: ForkKnife },
-  { name: 'function', Icon: Function },
-  { name: 'funnel', Icon: Funnel },
-  { name: 'game-controller', Icon: GameController },
-  { name: 'gauge', Icon: Gauge },
-  { name: 'gavel', Icon: Gavel },
-  { name: 'gear', Icon: Gear },
   { name: 'gear-six', Icon: GearSix },
-  { name: 'ghost', Icon: Ghost },
-  { name: 'gift', Icon: Gift },
   { name: 'git-branch', Icon: GitBranch },
   { name: 'globe', Icon: Globe },
-  { name: 'graduation-cap', Icon: GraduationCap },
-  { name: 'guitar', Icon: Guitar },
-  { name: 'hammer', Icon: Hammer },
-  { name: 'hand', Icon: Hand },
-  { name: 'handshake', Icon: Handshake },
-  { name: 'headphones', Icon: Headphones },
-  { name: 'headset', Icon: Headset },
   { name: 'heart', Icon: Heart },
-  { name: 'heartbeat', Icon: Heartbeat },
-  { name: 'horse', Icon: Horse },
-  { name: 'hospital', Icon: Hospital },
-  { name: 'hourglass', Icon: Hourglass },
   { name: 'house', Icon: House },
-  { name: 'ice-cream', Icon: IceCream },
-  { name: 'identification-badge', Icon: IdentificationBadge },
-  { name: 'image', Icon: Image },
-  { name: 'infinity', Icon: InfinityIcon },
-  { name: 'island', Icon: Island },
-  { name: 'joystick', Icon: Joystick },
+  { name: 'image-square', Icon: ImageSquare },
   { name: 'kanban', Icon: Kanban },
-  { name: 'key', Icon: Key },
-  { name: 'keyboard', Icon: Keyboard },
-  { name: 'knife', Icon: Knife },
-  { name: 'ladder', Icon: Ladder },
-  { name: 'lamp', Icon: Lamp },
-  { name: 'laptop', Icon: Laptop },
-  { name: 'leaf', Icon: Leaf },
-  { name: 'lifebuoy', Icon: Lifebuoy },
   { name: 'lightbulb', Icon: Lightbulb },
-  { name: 'lighthouse', Icon: Lighthouse },
-  { name: 'lightning', Icon: Lightning },
   { name: 'link', Icon: Link },
-  { name: 'list', Icon: List },
+  { name: 'list-bullets', Icon: ListBullets },
   { name: 'list-checks', Icon: ListChecks },
   { name: 'lock', Icon: Lock },
-  { name: 'magic-wand', Icon: MagicWand },
-  { name: 'magnet', Icon: Magnet },
   { name: 'magnifying-glass', Icon: MagnifyingGlass },
-  { name: 'mailbox', Icon: Mailbox },
   { name: 'map-pin', Icon: MapPin },
-  { name: 'mask-happy', Icon: MaskHappy },
-  { name: 'medal', Icon: Medal },
   { name: 'megaphone', Icon: Megaphone },
-  { name: 'meteor', Icon: Meteor },
-  { name: 'microphone', Icon: Microphone },
-  { name: 'microscope', Icon: Microscope },
-  { name: 'money', Icon: Money },
-  { name: 'monitor', Icon: Monitor },
-  { name: 'moon', Icon: Moon },
-  { name: 'motorcycle', Icon: Motorcycle },
-  { name: 'mountains', Icon: Mountains },
-  { name: 'music-note', Icon: MusicNote },
-  { name: 'needle', Icon: Needle },
-  { name: 'network', Icon: Network },
-  { name: 'newspaper', Icon: Newspaper },
-  { name: 'note', Icon: Note },
-  { name: 'notebook', Icon: Notebook },
-  { name: 'notepad', Icon: Notepad },
-  { name: 'package', Icon: Package },
-  { name: 'paint-brush', Icon: PaintBrush },
+  { name: 'note-pencil', Icon: NotePencil },
   { name: 'palette', Icon: Palette },
-  { name: 'paper-plane', Icon: PaperPlane },
-  { name: 'paperclip', Icon: Paperclip },
-  { name: 'park', Icon: Park },
-  { name: 'paw-print', Icon: PawPrint },
-  { name: 'peace', Icon: Peace },
-  { name: 'pen', Icon: Pen },
-  { name: 'pencil', Icon: Pencil },
-  { name: 'person', Icon: Person },
-  { name: 'phone', Icon: Phone },
-  { name: 'pi', Icon: Pi },
-  { name: 'piggy-bank', Icon: PiggyBank },
-  { name: 'pill', Icon: Pill },
-  { name: 'pizza', Icon: Pizza },
-  { name: 'planet', Icon: Planet },
-  { name: 'plant', Icon: Plant },
-  { name: 'playlist', Icon: Playlist },
-  { name: 'plug', Icon: Plug },
-  { name: 'potted-plant', Icon: PottedPlant },
-  { name: 'prescription', Icon: Prescription },
-  { name: 'presentation', Icon: Presentation },
-  { name: 'printer', Icon: Printer },
-  { name: 'push-pin', Icon: PushPin },
-  { name: 'puzzle-piece', Icon: PuzzlePiece },
-  { name: 'qr-code', Icon: QrCode },
-  { name: 'quotes', Icon: Quotes },
-  { name: 'rabbit', Icon: Rabbit },
-  { name: 'radio', Icon: Radio },
-  { name: 'rainbow', Icon: Rainbow },
-  { name: 'recycle', Icon: Recycle },
-  { name: 'robot', Icon: Robot },
+  { name: 'pencil-simple', Icon: PencilSimple },
   { name: 'rocket', Icon: Rocket },
-  { name: 'ruler', Icon: Ruler },
-  { name: 'sailboat', Icon: Sailboat },
-  { name: 'scales', Icon: Scales },
-  { name: 'scissors', Icon: Scissors },
-  { name: 'scroll', Icon: Scroll },
-  { name: 'seal', Icon: Seal },
-  { name: 'security-camera', Icon: SecurityCamera },
-  { name: 'shield', Icon: Shield },
   { name: 'shield-check', Icon: ShieldCheck },
-  { name: 'shooting-star', Icon: ShootingStar },
-  { name: 'shopping-bag', Icon: ShoppingBag },
-  { name: 'shopping-cart', Icon: ShoppingCart },
-  { name: 'signature', Icon: Signature },
-  { name: 'smiley', Icon: Smiley },
-  { name: 'sneaker', Icon: Sneaker },
-  { name: 'snowflake', Icon: Snowflake },
-  { name: 'soccer-ball', Icon: SoccerBall },
   { name: 'sparkle', Icon: Sparkle },
-  { name: 'stack', Icon: Stack },
   { name: 'stack-simple', Icon: StackSimple },
   { name: 'star', Icon: Star },
-  { name: 'stethoscope', Icon: Stethoscope },
-  { name: 'storefront', Icon: Storefront },
-  { name: 'strategy', Icon: Strategy },
-  { name: 'student', Icon: Student },
-  { name: 'suitcase', Icon: Suitcase },
-  { name: 'sun', Icon: Sun },
-  { name: 'sword', Icon: Sword },
-  { name: 't-shirt', Icon: TShirt },
   { name: 'tag', Icon: Tag },
   { name: 'target', Icon: Target },
-  { name: 'television', Icon: Television },
-  { name: 'tent', Icon: Tent },
   { name: 'terminal', Icon: Terminal },
-  { name: 'ticket', Icon: Ticket },
-  { name: 'timer', Icon: Timer },
   { name: 'toolbox', Icon: Toolbox },
-  { name: 'train', Icon: Train },
-  { name: 'translate', Icon: Translate },
-  { name: 'trash', Icon: Trash },
-  { name: 'tree', Icon: Tree },
   { name: 'tree-structure', Icon: TreeStructure },
-  { name: 'trophy', Icon: Trophy },
-  { name: 'truck', Icon: Truck },
-  { name: 'umbrella', Icon: Umbrella },
-  { name: 'user', Icon: User },
-  { name: 'user-circle', Icon: UserCircle },
   { name: 'users', Icon: Users },
-  { name: 'vault', Icon: Vault },
-  { name: 'vinyl-record', Icon: VinylRecord },
-  { name: 'wallet', Icon: Wallet },
   { name: 'warning', Icon: Warning },
-  { name: 'watch', Icon: Watch },
-  { name: 'waves', Icon: Waves },
-  { name: 'wind', Icon: Wind },
-  { name: 'wine', Icon: Wine },
   { name: 'wrench', Icon: Wrench },
 ]
 
 const ICON_MAP: Record<string, ComponentType<IconProps>> = Object.fromEntries(
-  ICON_OPTIONS.map((o) => [o.name, o.Icon]),
+  ICON_OPTIONS.map((option) => [option.name, option.Icon]),
 )
 
 function normalizeIconName(name: string): string {
@@ -344,7 +130,7 @@ export function findIcon(name: string | null | undefined): ComponentType<IconPro
   return ICON_MAP[normalizeIconName(name)] ?? null
 }
 
-/** Resolves a Phosphor icon name to its component, with fallback to FileText */
+/** Resolves a Phosphor icon name to its component, with fallback to FileText. */
 export function resolveIcon(name: string | null): ComponentType<IconProps> {
   return findIcon(name) ?? FileText
 }

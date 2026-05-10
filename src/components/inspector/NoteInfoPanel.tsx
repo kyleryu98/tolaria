@@ -1,5 +1,5 @@
 import type { VaultEntry } from '../../types'
-import { Info } from '@phosphor-icons/react'
+import { Info } from '@phosphor-icons/react/Info'
 import { countWords } from '../../utils/wikilinks'
 import { getLocaleDateLocale, translate, type AppLocale } from '../../lib/i18n'
 

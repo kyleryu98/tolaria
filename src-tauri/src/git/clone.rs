@@ -81,7 +81,7 @@ fn run_clone(request: &CloneRequest<'_>) -> Result<(), String> {
     })?;
     let output = build_clone_command(request, destination)
         .output()
-        .map_err(|e| format!("Failed to run git clone: {}", e))?;
+        .map_err(|e| format!("Failed to run git clone: {e}"))?;
 
     if output.status.success() {
         return Ok(());

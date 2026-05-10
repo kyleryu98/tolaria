@@ -21,7 +21,7 @@ const IMAGE_EXTENSIONS: &[&str] = &["jpg", "jpeg", "png", "gif", "webp", "svg", 
 fn prepare_attachment_path(vault_path: &str, filename: &str) -> Result<std::path::PathBuf, String> {
     let attachments_dir = Path::new(vault_path).join("attachments");
     fs::create_dir_all(&attachments_dir)
-        .map_err(|e| format!("Failed to create attachments directory: {}", e))?;
+        .map_err(|e| format!("Failed to create attachments directory: {e}"))?;
 
     let timestamp = std::time::SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -40,9 +40,9 @@ pub fn save_image(vault_path: &str, filename: &str, data: &str) -> Result<String
 
     let bytes = base64::engine::general_purpose::STANDARD
         .decode(data)
-        .map_err(|e| format!("Invalid base64 data: {}", e))?;
+        .map_err(|e| format!("Invalid base64 data: {e}"))?;
 
-    fs::write(&target_path, bytes).map_err(|e| format!("Failed to write image: {}", e))?;
+    fs::write(&target_path, bytes).map_err(|e| format!("Failed to write image: {e}"))?;
 
     Ok(target_path.to_string_lossy().to_string())
 }
@@ -53,7 +53,7 @@ pub fn save_image(vault_path: &str, filename: &str, data: &str) -> Result<String
 pub fn copy_image_to_vault(vault_path: &str, source_path: &str) -> Result<String, String> {
     let source = Path::new(source_path);
     if !source.exists() {
-        return Err(format!("Source file does not exist: {}", source_path));
+        return Err(format!("Source file does not exist: {source_path}"));
     }
 
     let ext = source
@@ -62,7 +62,7 @@ pub fn copy_image_to_vault(vault_path: &str, source_path: &str) -> Result<String
         .unwrap_or("")
         .to_lowercase();
     if !IMAGE_EXTENSIONS.contains(&ext.as_str()) {
-        return Err(format!("Not a supported image format: {}", source_path));
+        return Err(format!("Not a supported image format: {source_path}"));
     }
 
     let filename = source
@@ -71,7 +71,7 @@ pub fn copy_image_to_vault(vault_path: &str, source_path: &str) -> Result<String
         .unwrap_or("image");
     let target_path = prepare_attachment_path(vault_path, filename)?;
 
-    fs::copy(source, &target_path).map_err(|e| format!("Failed to copy image: {}", e))?;
+    fs::copy(source, &target_path).map_err(|e| format!("Failed to copy image: {e}"))?;
 
     Ok(target_path.to_string_lossy().to_string())
 }
@@ -187,10 +187,10 @@ mod tests {
         let vault_path = dir.path().to_str().unwrap();
 
         for ext in &["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "tiff"] {
-            let source_path = dir.path().join(format!("img.{}", ext));
+            let source_path = dir.path().join(format!("img.{ext}"));
             fs::write(&source_path, b"data").unwrap();
             let result = copy_image_to_vault(vault_path, source_path.to_str().unwrap());
-            assert!(result.is_ok(), "failed for extension: {}", ext);
+            assert!(result.is_ok(), "failed for extension: {ext}");
         }
     }
 }
