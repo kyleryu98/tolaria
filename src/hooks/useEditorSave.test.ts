@@ -377,6 +377,32 @@ describe('useEditorSave', () => {
       expect(onNotePersisted).toHaveBeenCalledWith('/test/note.md', 'auto-saved content')
     })
 
+    it('keeps pending auto-save when an equivalent persistence scope array is recreated', async () => {
+      const onNotePersisted = vi.fn()
+      const { result, rerender } = renderHook(
+        ({ scope }: { scope: readonly string[] }) =>
+          useEditorSave({
+            updateVaultContent,
+            setTabs,
+            setToastMessage,
+            onNotePersisted,
+            persistenceScope: scope,
+          }),
+        { initialProps: { scope: ['/vault'] } },
+      )
+
+      act(() => { result.current.handleContentChange('/vault/note.md', 'draft survives rerender') })
+      rerender({ scope: ['/vault'] })
+
+      await act(async () => { vi.advanceTimersByTime(AUTO_SAVE_DEBOUNCE_MS) })
+
+      expect(mockInvokeFn).toHaveBeenCalledWith('save_note_content', {
+        path: '/vault/note.md',
+        content: 'draft survives rerender',
+      })
+      expect(onNotePersisted).toHaveBeenCalledWith('/vault/note.md', 'draft survives rerender')
+    })
+
     it('resets debounce timer on each content change', async () => {
       const { result } = renderHook(() =>
         useEditorSave({ updateVaultContent, setTabs, setToastMessage })

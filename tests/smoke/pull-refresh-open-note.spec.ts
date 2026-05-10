@@ -152,6 +152,7 @@ ${pulledBody}
     await expect(page.locator('.bn-editor h1').first()).toHaveText('Note B', { timeout: 5_000 })
     await placeCaretAtEndOfBlock(page, 1)
     await page.keyboard.type(` ${marker}`, { delay: 20 })
+    await page.keyboard.press(process.platform === 'darwin' ? 'Meta+S' : 'Control+S')
     await expect(async () => {
       expect(fs.readFileSync(noteBPath, 'utf8')).toContain(marker)
     }).toPass({ timeout: 10_000 })

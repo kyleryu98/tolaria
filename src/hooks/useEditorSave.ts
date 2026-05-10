@@ -236,6 +236,11 @@ function useCancelAutoSave(autoSaveTimerRef: MutableRefObject<ReturnType<typeof 
   return cancelAutoSave
 }
 
+function persistenceScopeKey(scope?: string | readonly string[]): string {
+  if (!Array.isArray(scope)) return scope ?? ''
+  return [...scope].sort().join('\0')
+}
+
 function usePendingContentScopeReset({
   cancelAutoSave,
   pendingContentRef,
@@ -245,11 +250,12 @@ function usePendingContentScopeReset({
   pendingContentRef: MutableRefObject<PendingContent | null>
   persistenceScope?: string | readonly string[]
 }) {
-  const previousScopeRef = useRef(persistenceScope)
+  const previousScopeKeyRef = useRef(persistenceScopeKey(persistenceScope))
 
   useLayoutEffect(() => {
-    if (previousScopeRef.current === persistenceScope) return
-    previousScopeRef.current = persistenceScope
+    const nextScopeKey = persistenceScopeKey(persistenceScope)
+    if (previousScopeKeyRef.current === nextScopeKey) return
+    previousScopeKeyRef.current = nextScopeKey
     pendingContentRef.current = null
     cancelAutoSave()
   }, [cancelAutoSave, pendingContentRef, persistenceScope])
